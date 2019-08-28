@@ -1,8 +1,8 @@
 package com.company.rentalstorerestwebservicegroupproject.dao;
 
 
-import com.company.rentalstorerestwebservicegroupproject.Model.Customer;
-import com.company.rentalstorerestwebservicegroupproject.Model.Item;
+import com.company.rentalstorerestwebservicegroupproject.model.Customer;
+import com.company.rentalstorerestwebservicegroupproject.model.Item;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -26,7 +26,8 @@ public class CustomerDaoJdbcTemplateImpl implements CustomerDao{
             "select * from customer";
 
     private static final String UPDATE_CUSTOMER_SQL =
-            "update customer set first_name = ?, last_name = ?, email = ?, company = ?, phone = ? where artist_id = ?";
+            "update customer set first_name = ?, last_name = ?, email = ?, company = ?, phone = ? where customer_id =" +
+                    " ?";
 
     private static final String DELETE_CUSTOMER_SQL =
             "delete from customer where customer_id = ?";

@@ -1,6 +1,6 @@
 package com.company.rentalstorerestwebservicegroupproject.dao;
 
-import com.company.rentalstorerestwebservicegroupproject.Model.Customer;
+import com.company.rentalstorerestwebservicegroupproject.model.Customer;
 import com.company.rentalstorerestwebservicegroupproject.model.Invoice;
 import org.junit.Before;
 import org.junit.runner.RunWith;
