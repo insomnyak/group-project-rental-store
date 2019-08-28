@@ -74,19 +74,6 @@ public class InvoiceDaoJdbcTemplateImpl implements InvoiceDao{
         return jdbcTemplate.query(SELECT_ALL_INVOICES_SQL, this::mapRowToInvoice);
     }
 
-    @Override
-    public void updateInvoice(Invoice invoice) {
-
-        jdbcTemplate.update(
-                UPDATE_INVOICE_SQL,
-                invoice.getCustomerId(),
-                invoice.getOrderDate(),
-                invoice.getPickupDate(),
-                invoice.getReturnDate(),
-                invoice.getLateFee(),
-                invoice.getInvoiceId());
-
-    }
 
     @Override
     public void deleteInvoice(int invoiceId) {
