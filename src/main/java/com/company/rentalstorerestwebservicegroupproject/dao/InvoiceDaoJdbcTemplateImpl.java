@@ -83,7 +83,8 @@ public class InvoiceDaoJdbcTemplateImpl implements InvoiceDao{
                 invoice.getOrderDate(),
                 invoice.getPickupDate(),
                 invoice.getReturnDate(),
-                invoice.getLateFee());
+                invoice.getLateFee(),
+                invoice.getInvoiceId());
 
     }
 

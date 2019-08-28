@@ -65,12 +65,12 @@ public class Invoice {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Invoice invoice = (Invoice) o;
-        return Objects.equals(invoiceId, invoice.invoiceId) &&
-                Objects.equals(customerId, invoice.customerId) &&
-                Objects.equals(orderDate, invoice.orderDate) &&
-                Objects.equals(pickupDate, invoice.pickupDate) &&
-                Objects.equals(returnDate, invoice.returnDate) &&
-                Objects.equals(lateFee, invoice.lateFee);
+        return invoiceId.equals(invoice.invoiceId) &&
+                customerId.equals(invoice.customerId) &&
+                orderDate.equals(invoice.orderDate) &&
+                pickupDate.equals(invoice.pickupDate) &&
+                returnDate.equals(invoice.returnDate) &&
+                lateFee.equals(invoice.lateFee);
     }
 
     @Override
