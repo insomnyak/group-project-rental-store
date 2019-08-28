@@ -83,7 +83,8 @@ public class InvoiceItemDaoJdbcTemplateImpl implements InvoiceItemDao {
                 invoiceitem.getItemId(),
                 invoiceitem.getQuantity(),
                 invoiceitem.getUnitRate(),
-                invoiceitem.getDiscount());
+                invoiceitem.getDiscount(),
+                invoiceitem.getInvoiceItemId());
 
     }
 
