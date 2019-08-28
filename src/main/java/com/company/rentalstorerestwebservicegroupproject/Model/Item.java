@@ -1,20 +1,26 @@
 package com.company.rentalstorerestwebservicegroupproject.Model;
 
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.Objects;
 
 public class Item {
 
-    private int item_id;
+    @Digits(integer = 11,fraction = 1)
+    private Integer item_id;
+    @Size(max=50)
     private String name;
+    @Size(max=255)
     private String description;
+    @Digits(integer = 8,fraction = 2)
     private BigDecimal daily_rate;
 
-    public int getItem_id() {
+    public Integer getItem_id() {
         return item_id;
     }
 
-    public void setItem_id(int item_id) {
+    public void setItem_id(Integer item_id) {
         this.item_id = item_id;
     }
 
