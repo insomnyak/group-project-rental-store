@@ -74,7 +74,6 @@ public class InvoiceDaoJdbcTemplateImpl implements InvoiceDao{
         return jdbcTemplate.query(SELECT_ALL_INVOICES_SQL, this::mapRowToInvoice);
     }
 
-
     @Override
     public void deleteInvoice(int invoiceId) {
 
