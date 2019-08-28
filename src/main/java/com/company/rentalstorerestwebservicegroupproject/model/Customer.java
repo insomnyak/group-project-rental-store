@@ -1,4 +1,4 @@
-package com.company.rentalstorerestwebservicegroupproject.Model;
+package com.company.rentalstorerestwebservicegroupproject.model;
 
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Max;

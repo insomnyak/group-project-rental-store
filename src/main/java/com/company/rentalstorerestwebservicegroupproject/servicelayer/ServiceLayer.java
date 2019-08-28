@@ -1,32 +1,12 @@
 package com.company.rentalstorerestwebservicegroupproject.servicelayer;
 
+import com.company.rentalstorerestwebservicegroupproject.model.Item;
 import com.company.rentalstorerestwebservicegroupproject.viewmodel.CustomerViewModel;
 import com.company.rentalstorerestwebservicegroupproject.viewmodel.InvoiceViewModel;
 
 import java.util.List;
 
 public class ServiceLayer {
-
-
-    public Customer addCustomer(Customer) {
-        return null;
-    }
-
-    public Customer findCustomer(Integer customerId) {
-        return null;
-    }
-
-    public List<Customer> findAllCustomers() {
-        return null;
-    }
-
-    public void updateCustomer(Customer) {
-
-    }
-
-    public void deleteCustomer(Integer customerId) {
-
-    }
 
     public Item addItem(Item item) {
         return null;
