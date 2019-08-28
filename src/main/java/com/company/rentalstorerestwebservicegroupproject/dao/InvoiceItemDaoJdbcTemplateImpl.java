@@ -1,6 +1,5 @@
 package com.company.rentalstorerestwebservicegroupproject.dao;
 
-import com.company.rentalstorerestwebservicegroupproject.model.Invoice;
 import com.company.rentalstorerestwebservicegroupproject.model.InvoiceItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -10,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -19,19 +17,20 @@ public class InvoiceItemDaoJdbcTemplateImpl implements InvoiceItemDao {
     private JdbcTemplate jdbcTemplate;
 
     private static final String INSERT_INVOICE_ITEM_SQL =
-            "insert into invoiceitem (invoice_id, item_id, quantity, unit_rate, discount) values (?, ?, ?, ?, ?)";
+            "insert into invoice_item (invoice_id, item_id, quantity, unit_rate, discount) values (?, ?, ?, ?, ?)";
 
     private static final String SELECT_INVOICE_ITEM_SQL =
-            "select * from invoiceitem where invoice_item_id = ?";
+            "select * from invoice_item where invoice_item_id = ?";
 
     private static final String SELECT_ALL_INVOICE_ITEMS_SQL =
-            "select * from invoiceitem";
+            "select * from invoice_item";
 
     private static final String UPDATE_INVOICE_ITEM_SQL =
-            "update invoiceitem set invoice_id = ?, item_id = ?, quantity = ?, unit_rate = ?, discount = ? where invoice_item_id = ?";
+            "update invoice_item set invoice_id = ?, item_id = ?, quantity = ?, unit_rate = ?, discount = ? where " +
+                    "invoice_item_id = ?";
 
     private static final String DELETE_INVOICE_ITEM =
-            "delete from invoiceitem where invoice_item_id = ?";
+            "delete from invoice_item where invoice_item_id = ?";
 
 
     @Autowired

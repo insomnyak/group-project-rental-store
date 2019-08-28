@@ -12,7 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -51,33 +50,23 @@ public class InvoiceDaoTest {
     public void setUp() throws Exception {
         // Clean up the test db
         List<InvoiceItem> inList = invoiceItemDao.getAllInvoiceItems();
-
-        for (InvoiceItem in : inList) {
-            invoiceItemDao.deleteInvoiceItem(in.getInvoiceItemId());
-        }
+        inList.stream().forEach(invoiceItem -> invoiceItemDao.deleteInvoiceItem(invoiceItem.getInvoiceItemId()));
 
         List<Invoice> iList = invoiceDao.getAllInvoices();
-
-        for (Invoice i : iList) {
-            invoiceDao.deleteInvoice(i.getInvoiceId());
-        }
+        iList.stream().forEach(invoice -> invoiceDao.deleteInvoice(invoice.getInvoiceId()));
 
         List<Customer> cList = customerDao.getAllCustomers();
-        for (Customer c : cList) {
-            customerDao.deleteCustomer(c.getCustomerId());
-        }
+        cList.stream().forEach(customer -> customerDao.deleteCustomer(customer.getCustomerId()));
 
         List<Item> itList = itemDao.getAllItems();
-
-        for (Item it : itList) {
-            itemDao.deleteItem(it.getItem_id());
-        }
+        itList.stream().forEach(item -> itemDao.deleteItem(item.getItem_id()));
     }
 
     @Test
     public void addGetDeleteInvoice() {
         customerDao.addCustomer(customer1);
         invoice1.setCustomerId(customer1.getCustomerId());
+        invoiceDao.addInvoice(invoice1);
 
         Invoice i2 = invoiceDao.getInvoice(invoice1.getInvoiceId());
         assertEquals(invoice1, i2);

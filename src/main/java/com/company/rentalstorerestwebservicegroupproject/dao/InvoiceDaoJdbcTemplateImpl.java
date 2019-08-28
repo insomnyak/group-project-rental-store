@@ -27,9 +27,6 @@ public class InvoiceDaoJdbcTemplateImpl implements InvoiceDao{
     private static final String SELECT_ALL_INVOICES_SQL =
             "select * from invoice";
 
-    private static final String UPDATE_INVOICE_SQL =
-            "update invoice set customer_id = ?, order_date = ?, pickup_date = ? , return_date = ?, late_fee = ? where invoice_id = ?";
-
     private static final String DELETE_INVOICE =
             "delete from invoice where invoice_id = ?";
 
@@ -83,10 +80,11 @@ public class InvoiceDaoJdbcTemplateImpl implements InvoiceDao{
 
     private Invoice mapRowToInvoice(ResultSet rs, int rowNum) throws SQLException {
         Invoice invoice = new Invoice();
+        invoice.setInvoiceId((rs.getInt("invoice_id")));
         invoice.setCustomerId(rs.getInt("customer_id"));
-        invoice.setOrderDate(rs.getDate("order_date").toLocalDate());
-        invoice.setPickupDate(rs.getDate("pickup_date").toLocalDate());
-        invoice.setReturnDate(rs.getDate("return_date").toLocalDate());
+        invoice.setOrderDate(LocalDate.parse(rs.getString("order_date")));
+        invoice.setPickupDate(LocalDate.parse(rs.getString("pickup_date")));
+        invoice.setReturnDate(LocalDate.parse(rs.getString("return_date")));
         invoice.setLateFee(rs.getDouble("late_fee"));
 
         return invoice;

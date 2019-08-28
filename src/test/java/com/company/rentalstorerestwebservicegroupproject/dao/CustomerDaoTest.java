@@ -1,15 +1,12 @@
 package com.company.rentalstorerestwebservicegroupproject.dao;
 
 import com.company.rentalstorerestwebservicegroupproject.model.Customer;
-import com.company.rentalstorerestwebservicegroupproject.model.Invoice;
-import com.company.rentalstorerestwebservicegroupproject.model.InvoiceItem;
 import com.company.rentalstorerestwebservicegroupproject.model.Item;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
