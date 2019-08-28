@@ -1,5 +1,7 @@
 package com.company.rentalstorerestwebservicegroupproject.model;
 
+import java.util.Objects;
+
 public class InvoiceItem {
 
     private int invoiceItemId;
@@ -55,5 +57,23 @@ public class InvoiceItem {
 
     public void setDiscount(double discount) {
         this.discount = discount;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        InvoiceItem that = (InvoiceItem) o;
+        return invoiceItemId == that.invoiceItemId &&
+                invoiceId == that.invoiceId &&
+                itemId == that.itemId &&
+                quantity == that.quantity &&
+                Double.compare(that.unitRate, unitRate) == 0 &&
+                Double.compare(that.discount, discount) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(invoiceItemId, invoiceId, itemId, quantity, unitRate, discount);
     }
 }

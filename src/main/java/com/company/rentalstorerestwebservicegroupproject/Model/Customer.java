@@ -1,38 +1,47 @@
 package com.company.rentalstorerestwebservicegroupproject.Model;
 
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Size;
 import java.util.Objects;
 
 public class Customer {
 
-    private int customer_id;
-    private String first_name;
-    private String last_name;
+    @Digits(integer = 11,fraction = 1)
+    private Integer customerId;
+    @Size(max = 50)
+    private String firstName;
+    @Size(max=50)
+    private String lastName;
+    @Size(max=75)
     private String email;
+    @Size(max=50)
     private String company;
+    @Size(max=50)
     private String phone;
 
-    public int getCustomer_id() {
-        return customer_id;
+    public Integer getCustomerId() {
+        return customerId;
     }
 
-    public void setCustomer_id(int customer_id) {
-        this.customer_id = customer_id;
+    public void setCustomerId(Integer customerId) {
+        this.customerId = customerId;
     }
 
-    public String getFirst_name() {
-        return first_name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getLast_name() {
-        return last_name;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getEmail() {
@@ -64,9 +73,9 @@ public class Customer {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Customer customer = (Customer) o;
-        return getCustomer_id() == customer.getCustomer_id() &&
-                Objects.equals(getFirst_name(), customer.getFirst_name()) &&
-                Objects.equals(getLast_name(), customer.getLast_name()) &&
+        return getCustomerId() == customer.getCustomerId() &&
+                Objects.equals(getFirstName(), customer.getFirstName()) &&
+                Objects.equals(getLastName(), customer.getLastName()) &&
                 Objects.equals(getEmail(), customer.getEmail()) &&
                 Objects.equals(getCompany(), customer.getCompany()) &&
                 Objects.equals(getPhone(), customer.getPhone());
@@ -74,6 +83,6 @@ public class Customer {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getCustomer_id(), getFirst_name(), getLast_name(), getEmail(),getCompany(),getPhone());
+        return Objects.hash(getCustomerId(), getFirstName(), getLastName(), getEmail(),getCompany(),getPhone());
     }
 }
