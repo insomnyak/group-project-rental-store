@@ -1,22 +1,22 @@
-package com.company.rentalstorerestwebservicegroupproject.Model;
+package com.company.rentalstorerestwebservicegroupproject.model;
 
 import java.util.Objects;
 
 public class Customer {
 
-    private int customer_id;
+    private int customerId;
     private String first_name;
     private String last_name;
     private String email;
     private String company;
     private String phone;
 
-    public int getCustomer_id() {
-        return customer_id;
+    public int getCustomerId() {
+        return customerId;
     }
 
-    public void setCustomer_id(int customer_id) {
-        this.customer_id = customer_id;
+    public void setCustomerId(int customerId) {
+        this.customerId = customerId;
     }
 
     public String getFirst_name() {
@@ -64,7 +64,7 @@ public class Customer {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Customer customer = (Customer) o;
-        return getCustomer_id() == customer.getCustomer_id() &&
+        return getCustomerId() == customer.getCustomerId() &&
                 Objects.equals(getFirst_name(), customer.getFirst_name()) &&
                 Objects.equals(getLast_name(), customer.getLast_name()) &&
                 Objects.equals(getEmail(), customer.getEmail()) &&
@@ -74,6 +74,6 @@ public class Customer {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getCustomer_id(), getFirst_name(), getLast_name(), getEmail(),getCompany(),getPhone());
+        return Objects.hash(getCustomerId(), getFirst_name(), getLast_name(), getEmail(),getCompany(),getPhone());
     }
 }

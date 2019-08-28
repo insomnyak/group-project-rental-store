@@ -1,7 +1,6 @@
 package com.company.rentalstorerestwebservicegroupproject.dao;
 
-import com.company.rentalstorerestwebservicegroupproject.Model.Customer;
-import com.company.rentalstorerestwebservicegroupproject.Model.Item;
+import com.company.rentalstorerestwebservicegroupproject.model.Item;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 

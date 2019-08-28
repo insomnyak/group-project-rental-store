@@ -1,9 +1,12 @@
 package com.company.rentalstorerestwebservicegroupproject.viewmodel;
 
+import com.company.rentalstorerestwebservicegroupproject.model.Customer;
+
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
-public class InvoiceViewModel {
+public class InvoiceViewModel<InvoiceItems> {
     private Integer invoiceId;
     private Customer customer;
     private LocalDate orderDate;

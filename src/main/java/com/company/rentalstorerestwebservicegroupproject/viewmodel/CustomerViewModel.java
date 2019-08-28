@@ -1,5 +1,8 @@
 package com.company.rentalstorerestwebservicegroupproject.viewmodel;
 
+import com.company.rentalstorerestwebservicegroupproject.model.Invoice;
+
+import java.util.List;
 import java.util.Objects;
 
 public class CustomerViewModel {

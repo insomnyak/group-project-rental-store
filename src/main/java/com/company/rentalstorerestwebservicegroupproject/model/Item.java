@@ -1,4 +1,4 @@
-package com.company.rentalstorerestwebservicegroupproject.Model;
+package com.company.rentalstorerestwebservicegroupproject.model;
 
 import java.math.BigDecimal;
 import java.util.Objects;

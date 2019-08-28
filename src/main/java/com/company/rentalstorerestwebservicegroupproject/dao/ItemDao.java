@@ -1,6 +1,6 @@
 package com.company.rentalstorerestwebservicegroupproject.dao;
 
-import com.company.rentalstorerestwebservicegroupproject.Model.Item;
+import com.company.rentalstorerestwebservicegroupproject.model.Item;
 
 import java.util.List;
 
