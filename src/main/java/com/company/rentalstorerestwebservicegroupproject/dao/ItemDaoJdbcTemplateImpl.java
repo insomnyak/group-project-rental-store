@@ -1,7 +1,6 @@
 package com.company.rentalstorerestwebservicegroupproject.dao;
 
-import com.company.rentalstorerestwebservicegroupproject.Model.Customer;
-import com.company.rentalstorerestwebservicegroupproject.Model.Item;
+import com.company.rentalstorerestwebservicegroupproject.model.Item;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
