@@ -52,7 +52,7 @@ public class Invoice {
         this.returnDate = returnDate;
     }
 
-    public double getLateFee() {
+    public Double getLateFee() {
         return lateFee;
     }
 
