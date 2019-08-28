@@ -4,7 +4,7 @@ import com.company.rentalstorerestwebservicegroupproject.model.Item;
 
 import java.util.Objects;
 
-public class InvoiceItemVIewModel {
+public class InvoiceItemViewModel {
     private Integer invoiceItemId;
     private Integer invoiceId;
     private Item item;
@@ -63,8 +63,8 @@ public class InvoiceItemVIewModel {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof InvoiceItemVIewModel)) return false;
-        InvoiceItemVIewModel that = (InvoiceItemVIewModel) o;
+        if (!(o instanceof InvoiceItemViewModel)) return false;
+        InvoiceItemViewModel that = (InvoiceItemViewModel) o;
         return getInvoiceItemId().equals(that.getInvoiceItemId()) &&
                 getInvoiceId().equals(that.getInvoiceId()) &&
                 getItem().equals(that.getItem()) &&

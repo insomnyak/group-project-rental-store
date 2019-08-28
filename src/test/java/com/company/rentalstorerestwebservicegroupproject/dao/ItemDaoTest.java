@@ -2,8 +2,6 @@ package com.company.rentalstorerestwebservicegroupproject.dao;
 
 
 import com.company.rentalstorerestwebservicegroupproject.model.Customer;
-import com.company.rentalstorerestwebservicegroupproject.model.Invoice;
-import com.company.rentalstorerestwebservicegroupproject.model.InvoiceItem;
 import com.company.rentalstorerestwebservicegroupproject.model.Item;
 import org.junit.Before;
 import org.junit.Test;

@@ -63,18 +63,19 @@ public class Invoice {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Invoice)) return false;
         Invoice invoice = (Invoice) o;
-        return invoiceId.equals(invoice.invoiceId) &&
-                customerId.equals(invoice.customerId) &&
-                orderDate.equals(invoice.orderDate) &&
-                pickupDate.equals(invoice.pickupDate) &&
-                returnDate.equals(invoice.returnDate) &&
-                lateFee.equals(invoice.lateFee);
+        return getInvoiceId().equals(invoice.getInvoiceId()) &&
+                getCustomerId().equals(invoice.getCustomerId()) &&
+                getOrderDate().equals(invoice.getOrderDate()) &&
+                getPickupDate().equals(invoice.getPickupDate()) &&
+                getReturnDate().equals(invoice.getReturnDate()) &&
+                getLateFee().equals(invoice.getLateFee());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(invoiceId, customerId, orderDate, pickupDate, returnDate, lateFee);
+        return Objects
+                .hash(getInvoiceId(), getCustomerId(), getOrderDate(), getPickupDate(), getReturnDate(), getLateFee());
     }
 }
