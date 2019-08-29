@@ -213,17 +213,17 @@ public class ServiceLayer {
     public void updateCustomerViewModel(CustomerViewModel cvm)  {
 
         Customer c = new Customer();
+        c.setCustomerId(cvm.getCustomerId());
         c.setFirstName(cvm.getFirstName());
         c.setLastName(cvm.getLastName());
         c.setCompany(cvm.getCompany());
         c.setPhone(cvm.getPhone());
         c.setEmail(cvm.getEmail());
-
         c = customerDao.addCustomer(c);
 
-        List<Invoice> inList = invoiceDao.getAllInvoicesByCustomerId(c.getCustomerId());
-        inList.stream()
-                .forEach(invoice -> invoiceDao.deleteInvoice(invoice.getCustomerId()));
+        customerDao.updateCustomer(c);
+
+        List<Invoice> existingInvoices = invoiceDao.getAllInvoicesByCustomerId(cvm.getCustomerId());
 
         List<Invoice> invoices = cvm.getInvoiceList();
         invoices.stream()
@@ -231,6 +231,16 @@ public class ServiceLayer {
                 {
                     in.setCustomerId(cvm.getCustomerId());
                     in = invoiceDao.addInvoice(in);
+
+                    boolean exists = false;
+                    for (Invoice invoice : existingInvoices) {
+                        if (in.getInvoiceId() == invoice.getInvoiceId()) {
+                            exists = true;
+                        }
+                    }
+                    if (!exists) {
+                        invoiceDao.addInvoice(in);
+                    }
                 });
     }
 
@@ -239,7 +249,7 @@ public class ServiceLayer {
         List<Invoice> inList = invoiceDao.getAllInvoicesByCustomerId(customerId);
 
         inList.stream()
-                .forEach(in -> invoiceDao.deleteInvoice(in.getCustomerId()));
+                .forEach(in -> invoiceDao.deleteInvoice(in.getInvoiceId()));
 
         customerDao.deleteCustomer(customerId);
     }
