@@ -220,7 +220,6 @@ public class ServiceLayer {
         c.setPhone(cvm.getPhone());
         c.setEmail(cvm.getEmail());
 
-        c = customerDao.addCustomer(c);
         customerDao.updateCustomer(c);
 
         List<Invoice> existingInvoices = invoiceDao.getAllInvoicesByCustomerId(cvm.getCustomerId());
