@@ -165,7 +165,6 @@ public class ServiceLayerTest {
         ivm.setLateFee(34.65);
 
         InvoiceItemViewModel iivm = new InvoiceItemViewModel();
-        InvoiceItem invoiceItem1 = new InvoiceItem();
         iivm.setInvoiceId(1);
         iivm.setQuantity(45);
         iivm.setUnitRate(234.23);

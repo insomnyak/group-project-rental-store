@@ -50,7 +50,7 @@ public class ItemDaoJdbcTemplateImpl implements ItemDao{
     }
 
     @Override
-    public Item getItem(int id) {
+    public Item getItem(Integer id) {
 
         try {
             return jdbcTemplate.queryForObject(SELECT_ITEM_SQL, this::mapRowToItem, id);
@@ -73,7 +73,7 @@ public class ItemDaoJdbcTemplateImpl implements ItemDao{
     }
 
     @Override
-    public void deleteItem(int id) {
+    public void deleteItem(Integer id) {
 
         jdbcTemplate.update(DELETE_ITEM_SQL, id);
     }
