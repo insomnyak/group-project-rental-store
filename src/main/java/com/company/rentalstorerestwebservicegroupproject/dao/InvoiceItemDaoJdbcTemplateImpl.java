@@ -32,6 +32,11 @@ public class InvoiceItemDaoJdbcTemplateImpl implements InvoiceItemDao {
     private static final String DELETE_INVOICE_ITEM =
             "delete from invoice_item where invoice_item_id = ?";
 
+    private static final String SELECT_ALL_INVOICE_ITEMS_BY_INVOICE_ID_SQL =
+            "select * from invoice_item where invoice_id = ?";
+
+    private static final String SELECT_ALL_INVOICE_ITEMS_BY_ITEM_ID_SQL =
+            "select * from invoice_item where item_id = ?";
 
     @Autowired
     public InvoiceItemDaoJdbcTemplateImpl(JdbcTemplate jdbcTemplate) {
@@ -96,7 +101,12 @@ public class InvoiceItemDaoJdbcTemplateImpl implements InvoiceItemDao {
 
     @Override
     public List<InvoiceItem> getInvoiceItemByInvoiceId(Integer invoiceId) {
-        return null;
+        return jdbcTemplate.query(SELECT_ALL_INVOICE_ITEMS_BY_INVOICE_ID_SQL, this::mapRowToInvoiceItem, invoiceId);
+    }
+
+    @Override
+    public List<InvoiceItem> getInvoiceItemByItemId(Integer itemId) {
+        return jdbcTemplate.query(SELECT_ALL_INVOICE_ITEMS_BY_ITEM_ID_SQL, this::mapRowToInvoiceItem, itemId);
     }
 
     private InvoiceItem mapRowToInvoiceItem(ResultSet rs, int rowNum) throws SQLException {
