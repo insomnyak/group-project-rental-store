@@ -78,17 +78,12 @@ public class InvoiceDaoTest {
 
     @Test(expected  = DataIntegrityViolationException.class)
     public void addWithRefIntegrityException() {
+
     }
 
     @Test
-    public void getAllAlbums() {
+    public void getByCustomerId() {
+
     }
-
-    @Test
-    public void updateAlbum() {
-    }
-
-
-
 
 }
