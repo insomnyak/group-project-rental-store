@@ -9,7 +9,6 @@ import com.company.rentalstorerestwebservicegroupproject.model.Invoice;
 import com.company.rentalstorerestwebservicegroupproject.model.InvoiceItem;
 import com.company.rentalstorerestwebservicegroupproject.model.Item;
 import com.company.rentalstorerestwebservicegroupproject.viewmodel.CustomerViewModel;
-import com.company.rentalstorerestwebservicegroupproject.viewmodel.InvoiceItemViewModel;
 import com.company.rentalstorerestwebservicegroupproject.viewmodel.InvoiceViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -159,29 +158,92 @@ public class ServiceLayer {
 
         invoiceDao.deleteInvoice(ivmId);
 
-
-
-
     }
 
     public CustomerViewModel addCustomerViewModel(CustomerViewModel cvm) {
-        return null;
+
+        Customer c = new Customer();
+        c.setFirstName(cvm.getFirstName());
+        c.setLastName(cvm.getLastName());
+        c.setCompany(cvm.getCompany());
+        c.setPhone(cvm.getPhone());
+        c.setEmail(cvm.getEmail());
+
+        c = customerDao.addCustomer(c);
+        cvm.setCustomerId(c.getCustomerId());
+
+        List<Invoice> invoices = cvm.getInvoiceList();
+
+        invoices.stream()
+                .forEach(in ->
+                {
+                    in.setCustomerId(cvm.getCustomerId());
+                    invoiceDao.addInvoice(in);
+                });
+
+        invoices = invoiceDao.getAllInvoicesByCustomerId(cvm.getCustomerId());
+        cvm.setInvoiceList(invoices);
+
+        return cvm;
     }
 
     public CustomerViewModel findCustomerViewModel(Integer cvmId) {
-        return null;
+
+        Customer customer = customerDao.getCustomer(cvmId);
+
+        return buildCustomerViewModel(customer);
     }
 
     public List<CustomerViewModel> findAllCustomerViewModels() {
+
+        List<Customer> cList = customerDao.getAllCustomers();
+
+        List<CustomerViewModel> custList = new ArrayList<>();
+
+        for (Customer customer : cList) {
+            CustomerViewModel cvm = buildCustomerViewModel(customer);
+            custList.add(cvm);
+        }
+
+        return custList;
+    }
+
+    private CustomerViewModel buildCustomerViewModel(Customer customer) {
         return null;
     }
 
-    public void updateCustomerViewModel(CustomerViewModel cvm) {
+    public void updateCustomerViewModel(CustomerViewModel cvmId)  {
 
+        Customer c = new Customer();
+        c.setFirstName(cvmId.getFirstName());
+        c.setLastName(cvmId.getLastName());
+        c.setCompany(cvmId.getCompany());
+        c.setPhone(cvmId.getPhone());
+        c.setEmail(cvmId.getEmail());
+
+        c = customerDao.addCustomer(c);
+
+        List<Invoice> inList = invoiceDao.getAllInvoicesByCustomerId(c.getCustomerId());
+        inList.stream()
+                .forEach(invoice -> invoiceDao.deleteInvoice(invoice.getCustomerId()));
+
+        List<Invoice> invoices = cvmId.getInvoiceList();
+        invoices.stream()
+                .forEach(in ->
+                {
+                    in.setCustomerId(cvmId.getCustomerId());
+                    in = invoiceDao.addInvoice(in);
+                });
     }
 
-    public void deleteCustomerViewModel(Integer cmvId) {
 
+    public void deleteCustomerViewModel(Integer customerId) {
+        List<Invoice> inList = invoiceDao.getAllInvoicesByCustomerId(customerId);
+
+        inList.stream()
+                .forEach(in -> invoiceDao.deleteInvoice(in.getCustomerId()));
+
+        customerDao.deleteCustomer(customerId);
     }
 
     public InvoiceItemViewModel addInvoiceItemViewModel(InvoiceItemViewModel iivm) {
@@ -237,7 +299,6 @@ public class ServiceLayer {
         invoiceItemDao.deleteInvoiceItem(iivId);
 
     }
-
 
     // Helper Methods
     private InvoiceViewModel buildInvoiceViewModel(Invoice invoice) {
