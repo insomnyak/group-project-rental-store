@@ -219,15 +219,19 @@ public class ServiceLayer {
         c.setCompany(cvm.getCompany());
         c.setPhone(cvm.getPhone());
         c.setEmail(cvm.getEmail());
+        c = customerDao.addCustomer(c);
 
         customerDao.updateCustomer(c);
 
         List<Invoice> existingInvoices = invoiceDao.getAllInvoicesByCustomerId(cvm.getCustomerId());
+
         List<Invoice> invoices = cvm.getInvoiceList();
         invoices.stream()
                 .forEach(in ->
                 {
                     in.setCustomerId(cvm.getCustomerId());
+                    in = invoiceDao.addInvoice(in);
+
                     boolean exists = false;
                     for (Invoice invoice : existingInvoices) {
                         if (in.getInvoiceId() == invoice.getInvoiceId()) {
