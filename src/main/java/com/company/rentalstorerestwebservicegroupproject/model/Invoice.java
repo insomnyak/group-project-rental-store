@@ -2,6 +2,7 @@ package com.company.rentalstorerestwebservicegroupproject.model;
 
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -14,8 +15,8 @@ public class Invoice {
     @Digits(integer = 11, fraction = 0)
     private Integer customerId;
 
-    
     @NotNull(message = "Missing orderDate")
+    @PastOrPresent
     private LocalDate orderDate;
 
     @NotNull(message = "Missing pickup date")
@@ -25,6 +26,7 @@ public class Invoice {
     private LocalDate returnDate;
 
     @NotNull(message = "Missing late Fee")
+    @Digits(integer = 8, fraction = 2)
     private Double lateFee;
 
     public Integer getInvoiceId() {
