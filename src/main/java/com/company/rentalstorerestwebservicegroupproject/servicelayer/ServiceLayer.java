@@ -219,8 +219,8 @@ public class ServiceLayer {
         c.setCompany(cvm.getCompany());
         c.setPhone(cvm.getPhone());
         c.setEmail(cvm.getEmail());
-        c = customerDao.addCustomer(c);
 
+        c = customerDao.addCustomer(c);
         customerDao.updateCustomer(c);
 
         List<Invoice> existingInvoices = invoiceDao.getAllInvoicesByCustomerId(cvm.getCustomerId());
@@ -230,6 +230,7 @@ public class ServiceLayer {
                 .forEach(in ->
                 {
                     in.setCustomerId(cvm.getCustomerId());
+
                     in = invoiceDao.addInvoice(in);
 
                     boolean exists = false;
