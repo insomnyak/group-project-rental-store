@@ -1,15 +1,30 @@
 package com.company.rentalstorerestwebservicegroupproject.model;
 
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Objects;
 
 public class Invoice {
 
+    @Digits(integer = 11, fraction = 0)
     private Integer invoiceId;
+
+    @NotNull(message = "Missing customerId")
+    @Digits(integer = 11, fraction = 0)
     private Integer customerId;
+
+    
+    @NotNull(message = "Missing orderDate")
     private LocalDate orderDate;
+
+    @NotNull(message = "Missing pickup date")
     private LocalDate pickupDate;
+
+    @NotNull(message = "Missing return date")
     private LocalDate returnDate;
+
+    @NotNull(message = "Missing late Fee")
     private Double lateFee;
 
     public Integer getInvoiceId() {

@@ -89,6 +89,11 @@ public class ServiceLayerTest {
 
         item1 = sl.addItem(item1);
 
+        item1.setName("something else");
+        item1.setDescription("something");
+
+        sl.updateItem(item1);
+
         Item item2 = sl.findItem(item1.getItem_id());
         assertEquals(item1, item2);
     }
@@ -165,7 +170,6 @@ public class ServiceLayerTest {
         ivm.setLateFee(34.65);
 
         InvoiceItemViewModel iivm = new InvoiceItemViewModel();
-        InvoiceItem invoiceItem1 = new InvoiceItem();
         iivm.setInvoiceId(1);
         iivm.setQuantity(45);
         iivm.setUnitRate(234.23);
