@@ -56,7 +56,7 @@ public class InvoiceDaoJdbcTemplateImpl implements InvoiceDao{
     }
 
     @Override
-    public Invoice getInvoice(int invoiceId) {
+    public Invoice getInvoice(Integer invoiceId) {
 
         try {
             return jdbcTemplate.queryForObject(SELECT_INVOICE_SQL, this::mapRowToInvoice, invoiceId);
@@ -72,7 +72,7 @@ public class InvoiceDaoJdbcTemplateImpl implements InvoiceDao{
     }
 
     @Override
-    public void deleteInvoice(int invoiceId) {
+    public void deleteInvoice(Integer invoiceId) {
 
         jdbcTemplate.update(DELETE_INVOICE, invoiceId);
 

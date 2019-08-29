@@ -8,10 +8,10 @@ public interface InvoiceDao {
 
     Invoice addInvoice(Invoice invoice);
 
-    Invoice getInvoice(int invoiceId);
+    Invoice getInvoice(Integer invoiceId);
 
     List<Invoice> getAllInvoices();
 
-    void deleteInvoice(int invoiceId);
+    void deleteInvoice(Integer invoiceId);
 
 }

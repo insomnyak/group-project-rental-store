@@ -49,8 +49,9 @@ public class CustomerDaoJdbcTemplateImpl implements CustomerDao{
         customer.setCustomerId(id);
         return customer;    }
 
+
     @Override
-    public Customer getCustomer(int id) {
+    public Customer getCustomer(Integer id) {
 
         try {
             return jdbcTemplate.queryForObject(SELECT_CUSTOMER_SQL, this::mapRowToCustomer, id);
@@ -74,7 +75,7 @@ public class CustomerDaoJdbcTemplateImpl implements CustomerDao{
     }
 
     @Override
-    public void deleteCustomer(int id) {
+    public void deleteCustomer(Integer id) {
 
         jdbcTemplate.update(DELETE_CUSTOMER_SQL, id);
     }
