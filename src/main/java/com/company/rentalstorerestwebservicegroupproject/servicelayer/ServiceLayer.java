@@ -9,6 +9,7 @@ import com.company.rentalstorerestwebservicegroupproject.model.Invoice;
 import com.company.rentalstorerestwebservicegroupproject.model.InvoiceItem;
 import com.company.rentalstorerestwebservicegroupproject.model.Item;
 import com.company.rentalstorerestwebservicegroupproject.viewmodel.CustomerViewModel;
+import com.company.rentalstorerestwebservicegroupproject.viewmodel.InvoiceItemViewModel;
 import com.company.rentalstorerestwebservicegroupproject.viewmodel.InvoiceViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -181,9 +182,6 @@ public class ServiceLayer {
                     invoiceDao.addInvoice(in);
                 });
 
-        invoices = invoiceDao.getAllInvoicesByCustomerId(cvm.getCustomerId());
-        cvm.setInvoiceList(invoices);
-
         return cvm;
     }
 
@@ -212,27 +210,33 @@ public class ServiceLayer {
         return null;
     }
 
-    public void updateCustomerViewModel(CustomerViewModel cvmId)  {
+    public void updateCustomerViewModel(CustomerViewModel cvm)  {
 
         Customer c = new Customer();
-        c.setFirstName(cvmId.getFirstName());
-        c.setLastName(cvmId.getLastName());
-        c.setCompany(cvmId.getCompany());
-        c.setPhone(cvmId.getPhone());
-        c.setEmail(cvmId.getEmail());
+        c.setCustomerId(cvm.getCustomerId());
+        c.setFirstName(cvm.getFirstName());
+        c.setLastName(cvm.getLastName());
+        c.setCompany(cvm.getCompany());
+        c.setPhone(cvm.getPhone());
+        c.setEmail(cvm.getEmail());
 
-        c = customerDao.addCustomer(c);
+        customerDao.updateCustomer(c);
 
-        List<Invoice> inList = invoiceDao.getAllInvoicesByCustomerId(c.getCustomerId());
-        inList.stream()
-                .forEach(invoice -> invoiceDao.deleteInvoice(invoice.getCustomerId()));
-
-        List<Invoice> invoices = cvmId.getInvoiceList();
+        List<Invoice> existingInvoices = invoiceDao.getAllInvoicesByCustomerId(cvm.getCustomerId());
+        List<Invoice> invoices = cvm.getInvoiceList();
         invoices.stream()
                 .forEach(in ->
                 {
-                    in.setCustomerId(cvmId.getCustomerId());
-                    in = invoiceDao.addInvoice(in);
+                    in.setCustomerId(cvm.getCustomerId());
+                    boolean exists = false;
+                    for (Invoice invoice : existingInvoices) {
+                        if (in.getInvoiceId() == invoice.getInvoiceId()) {
+                            exists = true;
+                        }
+                    }
+                    if (!exists) {
+                        invoiceDao.addInvoice(in);
+                    }
                 });
     }
 
@@ -241,7 +245,7 @@ public class ServiceLayer {
         List<Invoice> inList = invoiceDao.getAllInvoicesByCustomerId(customerId);
 
         inList.stream()
-                .forEach(in -> invoiceDao.deleteInvoice(in.getCustomerId()));
+                .forEach(in -> invoiceDao.deleteInvoice(in.getInvoiceId()));
 
         customerDao.deleteCustomer(customerId);
     }
