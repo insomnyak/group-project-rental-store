@@ -1,6 +1,8 @@
 package com.company.rentalstorerestwebservicegroupproject.model;
 
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -9,10 +11,15 @@ public class Item {
 
     @Digits(integer = 11,fraction = 1)
     private Integer item_id;
-    @Size(max=50)
+
+    @NotNull(message = "Missing item name")
+    @NotEmpty(message = "Missing item name")
+    @Size(max=50, message = "Item name is too long. Max 50 characters.")
     private String name;
-    @Size(max=255)
+
+    @Size(max=255, message = "Description is too long. Max 255 characters.")
     private String description;
+
     @Digits(integer = 8,fraction = 2)
     private BigDecimal daily_rate;
 
