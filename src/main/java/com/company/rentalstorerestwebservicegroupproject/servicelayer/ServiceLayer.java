@@ -67,6 +67,12 @@ public class ServiceLayer {
 
     public void deleteItem(Integer itemId) {
 
+        List<InvoiceItem> iivmList=invoiceItemDao.getInvoiceItemByItemId(itemId);
+
+        iivmList.stream()
+                .forEach(invoiceItem -> invoiceItemDao.deleteInvoiceItem(invoiceItem.getInvoiceItemId()));
+
+
         itemDao.deleteItem(itemId);
     }
 
@@ -98,6 +104,7 @@ public class ServiceLayer {
             if (c == null)
                 customerDao.addCustomer(ivm.getCustomer());
         }
+
             Invoice invoice = new Invoice();
             invoice.setCustomerId(ivm.getCustomer().getCustomerId());
             invoice.setOrderDate(ivm.getOrderDate());
@@ -106,6 +113,13 @@ public class ServiceLayer {
             invoice.setLateFee(ivm.getLateFee());
             invoice = invoiceDao.addInvoice(invoice);
             ivm.setInvoiceId(invoice.getInvoiceId());
+
+            Integer finalInvId = invoice.getInvoiceId();
+            ivm.getInvoiceItemList().stream().forEach(invoiceItemViewModel -> {
+                invoiceItemViewModel.setInvoiceId(finalInvId);
+                addInvoiceItemViewModel(invoiceItemViewModel);
+            });
+
 
             return ivm;
     }
@@ -170,6 +184,61 @@ public class ServiceLayer {
 
     }
 
+    public InvoiceItemViewModel addInvoiceItemViewModel(InvoiceItemViewModel iivm) {
+
+        Integer itemId=iivm.getItem().getItem_id();
+
+        //If I dont have an item
+        if(itemId==null){
+
+            itemDao.addItem(iivm.getItem());
+        }
+        else {
+
+            Item i=itemDao.getItem(iivm.getItem().getItem_id());
+            if (i==null)
+                itemDao.addItem(iivm.getItem());
+        }
+            InvoiceItem ii=new InvoiceItem();
+            ii.setInvoiceId(iivm.getInvoiceId());
+            ii.setItemId(iivm.getItem().getItem_id());
+            ii.setQuantity(iivm.getQuantity());
+            ii.setUnitRate(iivm.getUnitRate());
+            ii.setDiscount(iivm.getDiscount());
+            ii=invoiceItemDao.addInvoiceItem(ii);
+            iivm.setInvoiceItemId(ii.getInvoiceItemId());
+
+        return iivm;
+    }
+
+    public InvoiceItemViewModel findInvoiceItemViewModel(Integer iivmId) {
+
+        InvoiceItem ii=invoiceItemDao.getInvoiceItem(iivmId);
+
+        return buildInvoiceItemViewModel(ii);
+    }
+
+    public List<InvoiceItemViewModel> findAllInvoiceItemViewModels() {
+
+        List<InvoiceItem> iiList=invoiceItemDao.getAllInvoiceItems();
+
+        List<InvoiceItemViewModel> iivmList=new ArrayList<>();
+
+        for (InvoiceItem invoiceItem : iiList){
+
+            InvoiceItemViewModel iivm=buildInvoiceItemViewModel(invoiceItem);
+            iivmList.add(iivm);
+        }
+        return iivmList;
+    }
+
+    public void deleteInvoiceItemViewModel(Integer iivId) {
+
+        invoiceItemDao.deleteInvoiceItem(iivId);
+
+    }
+
+
     // Helper Methods
     private InvoiceViewModel buildInvoiceViewModel(Invoice invoice) {
 
@@ -180,7 +249,12 @@ public class ServiceLayer {
         Customer customer = customerDao.getCustomer(invoice.getCustomerId());
 
         // Get the InvoiceItemViewListModel associated with the Invoices
-//        List<InvoiceItemViewModel> iivmList = invoiceItemDao.getInvoiceItemByInvoiceId(invoice.getInvoiceId());
+        List<InvoiceItemViewModel> iivmList = new ArrayList<>();
+        List<InvoiceItem> invoiceItems = invoiceItemDao.getInvoiceItemByInvoiceId(invoice.getInvoiceId());
+        invoiceItems.stream().forEach(invoiceItem -> {
+            InvoiceItemViewModel iivm = buildInvoiceItemViewModel(invoiceItem);
+            iivmList.add(iivm);
+        });
 
         // Assemble the InvoiceViewModel
         InvoiceViewModel ivm = new InvoiceViewModel();
@@ -190,9 +264,27 @@ public class ServiceLayer {
         ivm.setPickupDate(invoice.getPickupDate());
         ivm.setReturnDate(invoice.getReturnDate());
         ivm.setLateFee(invoice.getLateFee());
-//        ivm.setInvoiceItemList(iivmList);
+        ivm.setInvoiceItemList(iivmList);
 
         // Return the InvoiceViewModel
         return ivm;
+    }
+
+    private InvoiceItemViewModel buildInvoiceItemViewModel(InvoiceItem invoiceItem){
+
+        if (invoiceItem==null) return null;
+
+        Item item = itemDao.getItem(invoiceItem.getItemId());
+
+        InvoiceItemViewModel iivm=new InvoiceItemViewModel();
+        iivm.setInvoiceItemId(invoiceItem.getInvoiceItemId());
+        iivm.setInvoiceId(invoiceItem.getInvoiceId());
+        iivm.setItem(item);
+        iivm.setQuantity(invoiceItem.getQuantity());
+        iivm.setUnitRate(invoiceItem.getUnitRate());
+        iivm.setDiscount(invoiceItem.getDiscount());
+
+        return iivm;
+
     }
 }
