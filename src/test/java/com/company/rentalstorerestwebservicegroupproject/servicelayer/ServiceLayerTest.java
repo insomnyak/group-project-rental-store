@@ -26,8 +26,6 @@ public class ServiceLayerTest {
     InvoiceItemDao invoiceItemDao;
     ItemDao itemDao;
 
-    private Customer customer1a = new Customer();
-    private Customer customer1b = new Customer();
     private Item item1a = new Item();
     private Item item1b = new Item();
     private Item item2a = new Item();
@@ -38,7 +36,11 @@ public class ServiceLayerTest {
     private InvoiceItem invoiceItem2A = new InvoiceItem();
     private InvoiceItem invoiceItem2B = new InvoiceItem();
     private InvoiceItem invoiceItem2C = new InvoiceItem();
-
+    private Invoice invoice1a =new Invoice();
+    private Invoice invoice1b = new Invoice();
+    Customer customer = new Customer();
+    Customer customer2 = new Customer();
+    Customer customer3 = new Customer();
 
     @Before
     public void setUp() throws Exception {
@@ -52,19 +54,204 @@ public class ServiceLayerTest {
         constructSampleData();
     }
 
-    private void constructSampleData() {
-        customer1a.setFirstName("xyz");
-        customer1a.setLastName("xyz");
-        customer1a.setEmail("xyz@xyz.com");
-        customer1a.setCompany("X Industries");
-        customer1a.setPhone("91723412312");
 
-        customer1b.setCustomerId(11);
-        customer1b.setFirstName("xyz");
-        customer1b.setLastName("xyz");
-        customer1b.setEmail("xyz@xyz.com");
-        customer1b.setCompany("X Industries");
-        customer1b.setPhone("91723412312");
+    @Test
+    public void addFindItem() {
+        Item item1 = new Item();
+        item1.setName("xyx");
+        item1.setDescription("something");
+        item1.setDaily_rate(new BigDecimal(23.45));
+
+        item1 = sl.addItem(item1);
+
+        Item item2 = sl.findItem(item1.getItem_id());
+        assertEquals(item1, item2);
+    }
+
+    @Test
+    public void findAllItem() {
+        Item item1 = new Item();
+        item1.setName("xyx");
+        item1.setDescription("something");
+        item1.setDaily_rate(new BigDecimal(23.45));
+        item1 = sl.addItem(item1);
+
+        List<Item> items = sl.findAllItem();
+        assertEquals(1, items.size());
+    }
+
+    @Test
+    public void updateItem() {
+        Item item1 = new Item();
+        item1.setName("xyxx");
+        item1.setDescription("somethingx");
+        item1.setDaily_rate(new BigDecimal(23.45));
+
+        item1 = sl.addItem(item1);
+
+        Item item2 = sl.findItem(item1.getItem_id());
+        assertEquals(item1, item2);
+    }
+
+    @Test
+    public void deleteItem() {
+        sl.deleteItem(101);
+        Item item1 = sl.findItem(101);
+        assertNull(item1);
+    }
+
+    @Test
+    public void addFindDeleteInvoiceViewModel() {
+        InvoiceViewModel ivm = new InvoiceViewModel();
+
+        Customer customer = new Customer();
+        customer.setCustomerId(1);
+        customer.setFirstName("Elinisa");
+        customer.setLastName("Canameti");
+        customer.setEmail("ec@gmail.com");
+        customer.setCompany("Google");
+        customer.setPhone("7186693953");
+
+        ivm.setCustomer(customer);
+
+        ivm.setOrderDate(LocalDate.of(2019,5,6));
+        ivm.setPickupDate(LocalDate.of(2020,7,8));
+        ivm.setReturnDate(LocalDate.of(2018,4,5));
+        ivm.setLateFee(34.65);
+
+        InvoiceItemViewModel iivm = new InvoiceItemViewModel();
+        InvoiceItem invoiceItem1 = new InvoiceItem();
+        iivm.setInvoiceId(1);
+        iivm.setQuantity(45);
+        iivm.setUnitRate(234.23);
+        iivm.setDiscount(23.33);
+
+        Item item = new Item();
+        item.setName("xyx");
+        item.setDescription("something");
+        item.setDaily_rate(new BigDecimal(23.45));
+
+        iivm.setItem(item);
+
+        List<InvoiceItemViewModel> iivms = new ArrayList<>();
+        iivms.add(iivm);
+
+        sl.addInvoiceViewModel(ivm);
+        InvoiceViewModel ivm2 = sl.findInvoiceViewModel(ivm.getInvoiceId());
+        assertEquals(ivm, ivm2);
+
+        sl.deleteInvoiceViewModel(ivm.getInvoiceId());
+        ivm2 = sl.findInvoiceViewModel(ivm.getInvoiceId());
+        assertNull(ivm2);
+    }
+
+    @Test
+    public void findAllInvoiceViewModels() {
+        InvoiceViewModel ivm = new InvoiceViewModel();
+
+        Customer customer = new Customer();
+        customer.setCustomerId(1);
+        customer.setFirstName("Elinisa");
+        customer.setLastName("Canameti");
+        customer.setEmail("ec@gmail.com");
+        customer.setCompany("Google");
+        customer.setPhone("7186693953");
+
+        ivm.setCustomer(customer);
+
+        ivm.setOrderDate(LocalDate.of(2019,5,6));
+        ivm.setPickupDate(LocalDate.of(2020,7,8));
+        ivm.setReturnDate(LocalDate.of(2018,4,5));
+        ivm.setLateFee(34.65);
+
+        InvoiceItemViewModel iivm = new InvoiceItemViewModel();
+        InvoiceItem invoiceItem1 = new InvoiceItem();
+        iivm.setInvoiceId(1);
+        iivm.setQuantity(45);
+        iivm.setUnitRate(234.23);
+        iivm.setDiscount(23.33);
+
+        Item item = new Item();
+        item.setName("xyx");
+        item.setDescription("something");
+        item.setDaily_rate(new BigDecimal(23.45));
+
+        iivm.setItem(item);
+
+        List<InvoiceItemViewModel> iivms = new ArrayList<>();
+        iivms.add(iivm);
+
+        sl.addInvoiceViewModel(ivm);
+        List<InvoiceViewModel> invoiceViewModels = sl.findAllInvoiceViewModels();
+        assertEquals(1, invoiceViewModels.size());
+    }
+
+    @Test
+    public void addFindDeleteCustomerViewModel() {
+        CustomerViewModel customerVM = new CustomerViewModel();
+
+        customerVM.setFirstName("Elinisa");
+        customerVM.setLastName("Canameti");
+        customerVM.setEmail("ec@gmail.com");
+        customerVM.setCompany("Google");
+        customerVM.setPhone("7186693953");
+
+        List<Invoice> invoices = new ArrayList<>();
+        invoices.add(invoice1a);
+
+        customerVM.setInvoiceList(invoices);
+
+        sl.addCustomerViewModel(customerVM);
+        CustomerViewModel customerVM2 = sl.findCustomerViewModel(customerVM.getCustomerId());
+        assertEquals(customerVM, customerVM2);
+
+        sl.deleteCustomerViewModel(5);
+        customerVM2 = sl.findCustomerViewModel(5);
+        assertNull(customerVM2);
+    }
+
+    @Test
+    public void findAllCustomerViewModels() {
+        CustomerViewModel customerVM = new CustomerViewModel();
+
+        customerVM.setFirstName("Elinisa");
+        customerVM.setLastName("Canameti");
+        customerVM.setEmail("ec@gmail.com");
+        customerVM.setCompany("Google");
+        customerVM.setPhone("7186693953");
+
+        List<Invoice> invoices = new ArrayList<>();
+        invoices.add(invoice1a);
+
+        customerVM.setInvoiceList(invoices);
+        sl.addCustomerViewModel(customerVM);
+
+        List<CustomerViewModel> customerViewModels = sl.findAllCustomerViewModels();
+        assertEquals(2, customerViewModels.size());
+    }
+
+    @Test
+    public void updateCustomerViewModel() {
+        CustomerViewModel customerVM = new CustomerViewModel();
+
+        customerVM.setCustomerId(3);
+        customerVM.setFirstName("Eli");
+        customerVM.setLastName("Cana");
+        customerVM.setEmail("ec@yahoo.com");
+        customerVM.setCompany("T");
+        customerVM.setPhone("7186693543");
+
+        List<Invoice> invoices = new ArrayList<>();
+        invoices.add(invoice1a);
+
+        customerVM.setInvoiceList(invoices);
+
+        sl.updateCustomerViewModel(customerVM);
+        CustomerViewModel customerVM2 = sl.findCustomerViewModel(customerVM.getCustomerId());
+        assertEquals(customerVM, customerVM2);
+    }
+
+    private void constructSampleData() {
 
         item1a.setName("xyx");
         item1a.setDescription("something");
@@ -120,6 +307,39 @@ public class ServiceLayerTest {
         invoiceItem2C.setQuantity(450);
         invoiceItem2C.setUnitRate(234.23);
         invoiceItem2C.setDiscount(23.33);
+
+        invoice1b.setInvoiceId(1);
+        invoice1b.setCustomerId(1);
+        invoice1b.setOrderDate(LocalDate.of(2019,5,6));
+        invoice1b.setPickupDate(LocalDate.of(2020,7,8));
+        invoice1b.setReturnDate(LocalDate.of(2018,4,5));
+        invoice1b.setLateFee(34.65);
+
+        invoice1a.setCustomerId(1);
+        invoice1a.setOrderDate(LocalDate.of(2019,5,6));
+        invoice1a.setPickupDate(LocalDate.of(2020,7,8));
+        invoice1a.setReturnDate(LocalDate.of(2018,4,5));
+        invoice1a.setLateFee(34.65);
+
+        customer.setCustomerId(1);
+        customer.setFirstName("Elinisa");
+        customer.setLastName("Canameti");
+        customer.setEmail("ec@gmail.com");
+        customer.setCompany("Google");
+        customer.setPhone("7186693953");
+
+        customer2.setFirstName("Elinisa");
+        customer2.setLastName("Canameti");
+        customer2.setEmail("ec@gmail.com");
+        customer2.setCompany("Google");
+        customer2.setPhone("7186693953");
+
+        customer3.setCustomerId(3);
+        customer3.setFirstName("Eli");
+        customer3.setLastName("Cana");
+        customer3.setEmail("ec@yahoo.com");
+        customer3.setCompany("T");
+        customer3.setPhone("7186693543");
     }
 
     private void setUpItemDaoMock() {
@@ -162,26 +382,12 @@ public class ServiceLayerTest {
 
     private void setUpInvoiceDaoMock() {
         invoiceDao = mock(InvoiceDaoJdbcTemplateImpl.class);
-        Invoice invoice=new Invoice();
-        invoice.setInvoiceId(1);
-        invoice.setCustomerId(1);
-        invoice.setOrderDate(LocalDate.of(2019,5,6));
-        invoice.setPickupDate(LocalDate.of(2020,7,8));
-        invoice.setReturnDate(LocalDate.of(2018,4,5));
-        invoice.setLateFee(34.65);
-
-        Invoice invoice2=new Invoice();
-        invoice.setCustomerId(1);
-        invoice.setOrderDate(LocalDate.of(2019,5,6));
-        invoice.setPickupDate(LocalDate.of(2020,7,8));
-        invoice.setReturnDate(LocalDate.of(2018,4,5));
-        invoice.setLateFee(34.65);
 
         List<Invoice> ivList = new ArrayList<>();
-        ivList.add(invoice);
+        ivList.add(invoice1b);
 
-        doReturn(invoice).when(invoiceDao).addInvoice(invoice2);
-        doReturn(invoice).when(invoiceDao).getInvoice(1);
+        doReturn(invoice1b).when(invoiceDao).addInvoice(invoice1a);
+        doReturn(invoice1b).when(invoiceDao).getInvoice(1);
         doReturn(ivList).when(invoiceDao).getAllInvoices();
         doNothing().when(invoiceDao).deleteInvoice(2);
         doReturn(null).when(invoiceDao).getInvoice(2);
@@ -190,29 +396,6 @@ public class ServiceLayerTest {
 
     private void setUpCustomerDaoMock() {
         customerDao=mock(CustomerDaoJdbcTemplateImpl.class);
-        Customer customer = new Customer();
-        customer.setCustomerId(1);
-        customer.setFirstName("Elinisa");
-        customer.setLastName("Canameti");
-        customer.setEmail("ec@gmail.com");
-        customer.setCompany("Google");
-        customer.setPhone("7186693953");
-
-        Customer customer2=new Customer();
-        customer.setFirstName("Elinisa");
-        customer.setLastName("Canameti");
-        customer.setEmail("ec@gmail.com");
-        customer.setCompany("Google");
-        customer.setPhone("7186693953");
-
-        Customer customer3=new Customer();
-        customer.setCustomerId(3);
-        customer.setFirstName("Eli");
-        customer.setLastName("Cana");
-        customer.setEmail("ec@yahoo.com");
-        customer.setCompany("T");
-        customer.setPhone("7186693543");
-
 
         List<Customer> customerList = new ArrayList<>();
         customerList.add(customer);
@@ -227,117 +410,4 @@ public class ServiceLayerTest {
         doReturn(null).when(customerDao).getCustomer(5);
     }
 
-    @Test
-    public void addFindItem() {
-        Item item1 = new Item();
-        item1.setName("xyx");
-        item1.setDescription("something");
-        item1.setDaily_rate(new BigDecimal(23.45));
-
-        item1 = sl.addItem(item1);
-
-        Item item2 = sl.findItem(item1.getItem_id());
-        assertEquals(item1, item2);
-    }
-
-    @Test
-    public void findAllItem() {
-        Item item1 = new Item();
-        item1.setName("xyx");
-        item1.setDescription("something");
-        item1.setDaily_rate(new BigDecimal(23.45));
-        item1 = sl.addItem(item1);
-
-        List<Item> items = sl.findAllItem();
-        assertEquals(1, items.size());
-    }
-
-    @Test
-    public void updateItem() {
-        Item item1 = new Item();
-        item1.setName("xyxx");
-        item1.setDescription("somethingx");
-        item1.setDaily_rate(new BigDecimal(23.45));
-
-        item1 = sl.addItem(item1);
-
-        Item item2 = sl.findItem(item1.getItem_id());
-        assertEquals(item1, item2);
-    }
-
-    @Test
-    public void deleteItem() {
-        sl.deleteItem(101);
-        Item item1 = sl.findItem(101);
-        assertNull(item1);
-    }
-
-    @Test
-    public void addFindInvoiceViewModel() {
-        InvoiceViewModel ivm = new InvoiceViewModel();
-
-        Customer customer = new Customer();
-        customer.setCustomerId(1);
-        customer.setFirstName("Elinisa");
-        customer.setLastName("Canameti");
-        customer.setEmail("ec@gmail.com");
-        customer.setCompany("Google");
-        customer.setPhone("7186693953");
-
-        ivm.setCustomer(customer);
-
-        ivm.setOrderDate(LocalDate.of(2019,5,6));
-        ivm.setPickupDate(LocalDate.of(2020,7,8));
-        ivm.setReturnDate(LocalDate.of(2018,4,5));
-        ivm.setLateFee(34.65);
-
-        InvoiceItemViewModel iivm = new InvoiceItemViewModel();
-        InvoiceItem invoiceItem1 = new InvoiceItem();
-        iivm.setInvoiceId(1);
-        iivm.setQuantity(45);
-        iivm.setUnitRate(234.23);
-        iivm.setDiscount(23.33);
-
-        Item item = new Item();
-        item.setName("xyx");
-        item.setDescription("something");
-        item.setDaily_rate(new BigDecimal(23.45));
-
-        iivm.setItem(item);
-
-        List<InvoiceItemViewModel> iivms = new ArrayList<>();
-        iivms.add(iivm);
-
-        sl.addInvoiceViewModel(ivm);
-        InvoiceViewModel ivm2 = sl.findInvoiceViewModel(ivm.getInvoiceId());
-        assertEquals(ivm, ivm2);
-    }
-
-    @Test
-    public void findAllInvoiceViewModels() {
-    }
-
-    @Test
-    public void deleteInvoiceViewModel() {
-    }
-
-    @Test
-    public void addCustomerViewModel() {
-    }
-
-    @Test
-    public void findCustomerViewModel() {
-    }
-
-    @Test
-    public void findAllCustomerViewModels() {
-    }
-
-    @Test
-    public void updateCustomerViewModel() {
-    }
-
-    @Test
-    public void deleteCustomerViewModel() {
-    }
 }
