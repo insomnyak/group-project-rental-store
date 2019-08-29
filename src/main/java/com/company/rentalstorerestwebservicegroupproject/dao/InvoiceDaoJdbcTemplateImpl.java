@@ -8,7 +8,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -27,8 +26,11 @@ public class InvoiceDaoJdbcTemplateImpl implements InvoiceDao{
     private static final String SELECT_ALL_INVOICES_SQL =
             "select * from invoice";
 
-    private static final String DELETE_INVOICE =
+    private static final String DELETE_INVOICE_SQL =
             "delete from invoice where invoice_id = ?";
+
+    private static final String SELECT_ALL_INVOICES_BY_CUSTOMER_ID_SQL =
+            "select * from invoice where customer_id = ?";
 
 
     @Autowired
@@ -73,9 +75,12 @@ public class InvoiceDaoJdbcTemplateImpl implements InvoiceDao{
 
     @Override
     public void deleteInvoice(Integer invoiceId) {
+        jdbcTemplate.update(DELETE_INVOICE_SQL, invoiceId);
+    }
 
-        jdbcTemplate.update(DELETE_INVOICE, invoiceId);
-
+    @Override
+    public List<Invoice> getAllInvoicesByCustomerId(Integer customerId) {
+        return jdbcTemplate.query(SELECT_ALL_INVOICES_BY_CUSTOMER_ID_SQL, this::mapRowToInvoice, customerId);
     }
 
     private Invoice mapRowToInvoice(ResultSet rs, int rowNum) throws SQLException {

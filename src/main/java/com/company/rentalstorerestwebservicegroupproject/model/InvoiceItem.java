@@ -1,14 +1,31 @@
 package com.company.rentalstorerestwebservicegroupproject.model;
 
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 public class InvoiceItem {
 
+    @Digits(integer = 11, fraction = 0)
     private Integer invoiceItemId;
+
+    @NotNull(message = "Please provide an Invoice ID")
+    @Digits(integer = 11, fraction = 0)
     private Integer invoiceId;
+
+    @NotNull(message = "Please provide an Item ID")
+    @Digits(integer = 11, fraction = 0)
     private Integer itemId;
+
+    @NotNull(message = "Please provide a quantity")
     private Integer quantity;
+
+    @NotNull(message = "Please provide a Unit Rate")
+    @Digits(integer = 8, fraction = 2)
     private Double unitRate;
+
+    @NotNull(message = "Please provide a the discount amount")
+    @Digits(integer = 8, fraction = 2)
     private Double discount;
 
     public Integer getInvoiceItemId() {

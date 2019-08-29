@@ -78,12 +78,22 @@ public class InvoiceDaoTest {
 
     @Test(expected  = DataIntegrityViolationException.class)
     public void addWithRefIntegrityException() {
-
+        invoice1.setCustomerId(99);
+        invoiceDao.addInvoice(invoice1);
+        LocalDate.parse("2019-09-09");
     }
 
     @Test
     public void getByCustomerId() {
+        customerDao.addCustomer(customer1);
+        invoice1.setCustomerId(customer1.getCustomerId());
+        invoiceDao.addInvoice(invoice1);
 
+        List<Invoice> invoices = invoiceDao.getAllInvoicesByCustomerId(customer1.getCustomerId());
+        assertEquals(1, invoices.size());
+
+        invoices = invoiceDao.getAllInvoicesByCustomerId(45);
+        assertEquals(0, invoices.size());
     }
 
 }

@@ -1,23 +1,43 @@
 package com.company.rentalstorerestwebservicegroupproject.model;
 
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.Objects;
 
 public class Customer {
 
-    @Digits(integer = 11,fraction = 1)
+    @Digits(integer = 11,fraction = 0)
     private Integer customerId;
-    @Size(max = 50)
+
+    @NotNull(message = "Please enter a first name")
+    @NotEmpty(message = "Please enter a first name")
+    @Size(max = 50, message = "Your first name is too long")
     private String firstName;
-    @Size(max=50)
+
+    @NotNull(message = "Please enter a last name")
+    @NotEmpty(message = "Please enter a last name")
+    @Size(max=50, message = "Your first name is too long")
     private String lastName;
-    @Size(max=75)
+
+    @NotNull(message = "Please enter an email")
+    @NotEmpty(message = "Please enter an email")
+    @Size(max=75, message = "Your email is too long")
+    @Pattern(regexp = "^[a-z0-9]+([._][a-z0-9]+)*[@][a-z0-9]+([.][a-z0-9]+)*$",
+        flags = {Pattern.Flag.CASE_INSENSITIVE},
+        message = "Invalid email address provided"
+    )
     private String email;
-    @Size(max=50)
+
+    @NotNull(message = "Please enter a company name")
+    @NotEmpty(message = "Please enter a company name")
+    @Size(max=50, message = "Your company name is too long")
     private String company;
-    @Size(max=50)
+
+    @NotNull(message = "Please enter a phone number")
+    @NotEmpty(message = "Please enter a phone number")
+    @Size(max=50, message = "Your phone number is too long")
+    @Pattern(regexp = "^[+]?[\\s]?[0-9]+?([\\s-.]?[0-9]+)*$",
+            message = "Invalid phone number provided"
+    )
     private String phone;
 
     public Integer getCustomerId() {

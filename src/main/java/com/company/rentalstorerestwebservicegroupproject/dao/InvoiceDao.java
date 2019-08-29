@@ -14,4 +14,6 @@ public interface InvoiceDao {
 
     void deleteInvoice(Integer invoiceId);
 
+    List<Invoice> getAllInvoicesByCustomerId(Integer customerId);
+
 }
