@@ -2,6 +2,8 @@ package com.company.rentalstorerestwebservicegroupproject.dao;
 
 
 import com.company.rentalstorerestwebservicegroupproject.model.Customer;
+import com.company.rentalstorerestwebservicegroupproject.model.Invoice;
+import com.company.rentalstorerestwebservicegroupproject.model.InvoiceItem;
 import com.company.rentalstorerestwebservicegroupproject.model.Item;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,10 +25,10 @@ public class ItemDaoTest {
 
     @Autowired
     CustomerDao customerDao;
-//    @Autowired
-//    InvoiceDao invoiceDao;
-//    @Autowired
-//    InvoiceItemDao invoiceItemDao;
+    @Autowired
+    InvoiceDao invoiceDao;
+    @Autowired
+    InvoiceItemDao invoiceItemDao;
     @Autowired
     ItemDao itemDao;
 
@@ -34,28 +36,17 @@ public class ItemDaoTest {
 
     public void setUp() throws Exception {
         // Clean up the test db
+        List<InvoiceItem> inList = invoiceItemDao.getAllInvoiceItems();
+        inList.stream().forEach(invoiceItem -> invoiceItemDao.deleteInvoiceItem(invoiceItem.getInvoiceItemId()));
+
+        List<Invoice> iList = invoiceDao.getAllInvoices();
+        iList.stream().forEach(invoice -> invoiceDao.deleteInvoice(invoice.getInvoiceId()));
+
         List<Customer> cList = customerDao.getAllCustomers();
-        for (Customer c : cList) {
-            customerDao.deleteCustomer(c.getCustomerId());
-        }
+        cList.stream().forEach(customer -> customerDao.deleteCustomer(customer.getCustomerId()));
 
-//        List<Invoice> iList = invoiceDao.getAllInvoices();
-//
-//        for (Invoice i : iList) {
-//            invoiceDao.deleteInvoice(i.getInvoiceId());
-//        }
-//
-//        List<InvoiceItem> tList = invoiceItemDao.getAllInvoiceItems();
-//
-//        for (InvoiceItem t : tList) {
-//            invoiceItemDao.deleteInvoiceItem(t.getInvoiceItemId());
-//        }
-
-        List<Item> bList = itemDao.getAllItems();
-
-        for (Item b : bList) {
-            itemDao.deleteItem(b.getItem_id());
-        }
+        List<Item> itList = itemDao.getAllItems();
+        itList.stream().forEach(item -> itemDao.deleteItem(item.getItem_id()));
 
     }
     @Test
