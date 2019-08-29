@@ -75,9 +75,7 @@ public class InvoiceDaoJdbcTemplateImpl implements InvoiceDao{
 
     @Override
     public void deleteInvoice(Integer invoiceId) {
-
         jdbcTemplate.update(DELETE_INVOICE_SQL, invoiceId);
-
     }
 
     @Override

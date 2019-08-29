@@ -58,7 +58,7 @@ public class InvoiceItemDaoJdbcTemplateImpl implements InvoiceItemDao {
     }
 
     @Override
-    public InvoiceItem getInvoiceItem(int invoiceItemId) {
+    public InvoiceItem getInvoiceItem(Integer invoiceItemId) {
 
         try {
             return jdbcTemplate.queryForObject(SELECT_INVOICE_ITEM_SQL, this::mapRowToInvoiceItem, invoiceItemId);
@@ -88,14 +88,20 @@ public class InvoiceItemDaoJdbcTemplateImpl implements InvoiceItemDao {
     }
 
     @Override
-    public void deleteInvoiceItem(int invoiceItemId) {
+    public void deleteInvoiceItem(Integer invoiceItemId) {
 
         jdbcTemplate.update(DELETE_INVOICE_ITEM, invoiceItemId);
 
     }
 
+    @Override
+    public List<InvoiceItem> getInvoiceItemByInvoiceId(Integer invoiceId) {
+        return null;
+    }
+
     private InvoiceItem mapRowToInvoiceItem(ResultSet rs, int rowNum) throws SQLException {
         InvoiceItem invoiceitem = new InvoiceItem();
+        invoiceitem.setInvoiceItemId(rs.getInt("invoice_item_id"));
         invoiceitem.setInvoiceId(rs.getInt("invoice_id"));
         invoiceitem.setItemId(rs.getInt("item_id"));
         invoiceitem.setQuantity(rs.getInt("quantity"));
@@ -104,4 +110,6 @@ public class InvoiceItemDaoJdbcTemplateImpl implements InvoiceItemDao {
 
         return invoiceitem;
     }
+
+
 }
