@@ -9,6 +9,7 @@ import com.company.rentalstorerestwebservicegroupproject.model.Invoice;
 import com.company.rentalstorerestwebservicegroupproject.model.InvoiceItem;
 import com.company.rentalstorerestwebservicegroupproject.model.Item;
 import com.company.rentalstorerestwebservicegroupproject.viewmodel.CustomerViewModel;
+import com.company.rentalstorerestwebservicegroupproject.viewmodel.InvoiceItemViewModel;
 import com.company.rentalstorerestwebservicegroupproject.viewmodel.InvoiceViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;

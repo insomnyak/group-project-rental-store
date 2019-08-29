@@ -25,5 +25,9 @@ public class CustomerViewModelController {
     public List<CustomerViewModel> updateCustomers(@RequestBody List<CustomerViewModel> customerViewModels) {
         customerViewModels.stream().forEach(cvm -> sl.updateCustomerViewModel(cvm));
         return null;
+
+
     }
+
+
 }
