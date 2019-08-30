@@ -22,8 +22,10 @@ public class ItemController {
     @RequestMapping(value = "/item", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     public List<Item> getAllItemsV() {
-
-        return sl.findAllItem();
+        List<Item> items = sl.findAllItem();
+        if (items == null || items.isEmpty())
+            throw new NoSuchElementException("No items found");
+        return items;
     };
 
     @RequestMapping(value = "/item", method = RequestMethod.PUT)
@@ -36,7 +38,6 @@ public class ItemController {
     @RequestMapping(value = "/item", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.OK)
     public List<Item> addItems(@RequestBody @Valid List<Item> items) {
-
         items.forEach(item -> sl.addItem(item));
         return items;
     };
@@ -52,9 +53,11 @@ public class ItemController {
     @RequestMapping(value = "/item/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(value = HttpStatus.OK)
     public String deleteItemById(@PathVariable @Digits(integer = 11, fraction = 0) Integer id) {
-
+        Item item = sl.findItem(id);
+        if (item == null) throw new NoSuchElementException(
+                String.format("Item #%s does not exist.", id)
+        );
         sl.deleteItem(id);
-
         return String.format("Successfully deleted Item id %s.", id);
     }
 
