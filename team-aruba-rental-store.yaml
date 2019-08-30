@@ -31,7 +31,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Customers'
+                type: string
         '400':
           description: Bad Request
         '422':
@@ -99,7 +99,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Customers'
+                type: string
         '400':
           description: Bad Request
         '404':
@@ -121,7 +121,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Items'
+              type: string
       responses:
         '200':
           description: list of all the updated items
@@ -196,7 +196,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Items'
+                type: string
         '400':
           description: Bad Request
         '404':
@@ -320,7 +320,7 @@ components:
             type: string
           phone:
             type: string
-          invoices:
+          invoiceList:
             type: array
             items:
               type: object
@@ -329,11 +329,11 @@ components:
                   type: integer
                 customerId:
                   type: integer
-                orderDate:
+                _orderDate:
                   type: string
-                pickUpDate:
+                _pickUpDate:
                   type: string
-                returnDate:
+                _returnDate:
                   type: string
                 lateFee:
                   type: number
@@ -352,7 +352,7 @@ components:
             type: integer
           name:
             type: string
-          descriptiom:
+          description:
             type: string
           dailyRate:
             type: number
@@ -381,23 +381,32 @@ components:
                 type: string
               phone:
                 type: string
-          orderDate:
+          _orderDate:
             type: string
-          pickUpDate:
+          _pickUpDate:
             type: string
-          returnDate:
+          _returnDate:
             type: string
           lateFee:
             type: number
-          invoiceItems:
+          invoiceItemList:
             type: array
             items:
               type: object
               properties:
                 invoiceItemId:
                   type: integer
-                itemId:
-                  type: integer
+                item:
+                  type: object
+                  properties:
+                    itemId:
+                      type: integer
+                    name:
+                      type: string
+                    description:
+                      type: string
+                    dailyRate:
+                      type: number
                 quantity:
                   type: integer
                 unitRate:
@@ -411,3 +420,7 @@ components:
           - returnDate
           - lateFee
           - invoiceItems
+
+
+
+

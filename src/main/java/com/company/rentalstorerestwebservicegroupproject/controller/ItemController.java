@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Digits;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @Validated
@@ -43,8 +44,9 @@ public class ItemController {
     @RequestMapping(value = "/item/{id}", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     public Item getItemById(@PathVariable @Digits(integer = 11, fraction = 0) Integer id) {
-
-        return sl.findItem(id);
+        Item item = sl.findItem(id);
+        if (item == null) throw new NoSuchElementException(String.format("Item Id # %s not found.", id));
+        return item;
     };
 
     @RequestMapping(value = "/item/{id}", method = RequestMethod.DELETE)
