@@ -12,6 +12,7 @@ import com.company.rentalstorerestwebservicegroupproject.viewmodel.CustomerViewM
 import com.company.rentalstorerestwebservicegroupproject.viewmodel.InvoiceItemViewModel;
 import com.company.rentalstorerestwebservicegroupproject.viewmodel.InvoiceViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.MissingRequiredPropertiesException;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,62 +37,36 @@ public class ServiceLayer {
         this.invoiceItemDao = invoiceItemDao;
         this.itemDao = itemDao;
     }
-//
-//    public Customer addCustomer(Customer customer) {
-//
-//        return null;
-//    }
-//    public Customer findCustomer(Integer customerId) {return null;}
-//    public List<Customer> findAllCustomers() {return null;}
-//    public void updateCustomer(Customer customer) {}
-//    public void deleteCustomer(Integer customerId) {}
 
     @Transactional
     public Item addItem(Item item) {
-
         return itemDao.addItem(item);
     }
 
     @Transactional
     public Item findItem(Integer itemId) {
-
         return itemDao.getItem(itemId);
     }
 
     @Transactional
     public List<Item> findAllItem() {
-
         return itemDao.getAllItems();
     }
 
     @Transactional
     public void updateItem(Item item) {
-
+        if (item.getItemId() == null) throw new IllegalArgumentException("No Item Id provided");
         itemDao.updateItem(item);
-
     }
 
     @Transactional
     public void deleteItem(Integer itemId) {
-
         List<InvoiceItem> iivmList=invoiceItemDao.getInvoiceItemByItemId(itemId);
 
-        iivmList.stream()
-                .forEach(invoiceItem -> invoiceItemDao.deleteInvoiceItem(invoiceItem.getInvoiceItemId()));
-
+        iivmList.stream().forEach(invoiceItem -> invoiceItemDao.deleteInvoiceItem(invoiceItem.getInvoiceItemId()));
 
         itemDao.deleteItem(itemId);
     }
-
-//    public InvoiceItem addInvoiceItem(InvoiceItem invoiceItem) {
-//
-//        return null;
-//    }
-//    public InvoiceItem findInvoiceItem(Integer invoiceItemId) {return null;}
-//    public List<InvoiceItem> findAllInvoiceItems() {return null;}
-//    public void updateInvoiceItem(InvoiceItem invoiceItem) {}
-//    public void deleteInvoiceItem(Integer invoiceItemId) {}
-
 
     @Transactional
     public InvoiceViewModel addInvoiceViewModel(InvoiceViewModel ivm) {
@@ -105,8 +80,11 @@ public class ServiceLayer {
         else {
             //If I have a customerId but its not in the database
             Customer c = customerDao.getCustomer(ivm.getCustomer().getCustomerId());
-            if (c == null)
+            if (c == null) {
                 customerDao.addCustomer(ivm.getCustomer());
+            } else if (!c.equals(ivm.getCustomer())) {
+                customerDao.updateCustomer(ivm.getCustomer());
+            }
         }
 
             Invoice invoice = new Invoice();
@@ -119,7 +97,7 @@ public class ServiceLayer {
             ivm.setInvoiceId(invoice.getInvoiceId());
 
             Integer finalInvId = invoice.getInvoiceId();
-            ivm.getInvoiceItemList().forEach(iItemVM -> {
+            ivm.getInvoiceItemList().stream().forEach(iItemVM -> {
                 iItemVM.setInvoiceId(finalInvId);
                 iItemVM.setInvoiceItemId(addInvoiceItemViewModel(iItemVM).getInvoiceItemId());
             });
@@ -176,7 +154,7 @@ public class ServiceLayer {
         //Remove the InvoiceItemViewModel
         List<InvoiceItem> iivmList = invoiceItemDao.getInvoiceItemByInvoiceId(ivmId);
 
-        iivmList.forEach(invoiceItemViewModel ->
+        iivmList.stream().forEach(invoiceItemViewModel ->
                 invoiceItemDao.deleteInvoiceItem(invoiceItemViewModel.getInvoiceItemId()));
 
 
@@ -201,11 +179,12 @@ public class ServiceLayer {
 
         List<Invoice> invoices = cvm.getInvoiceList();
 
-        invoices.forEach(in -> {
-                    in.setCustomerId(cvm.getCustomerId());
-                    in.setInvoiceId(invoiceDao.addInvoice(in).getInvoiceId());
-                });
-
+        if (invoices != null) {
+            invoices.stream().forEach(in -> {
+                in.setCustomerId(cvm.getCustomerId());
+                in.setInvoiceId(invoiceDao.addInvoice(in).getInvoiceId());
+            });
+        }
         return cvm;
     }
 
@@ -264,7 +243,7 @@ public class ServiceLayer {
         List<Invoice> existingInvoices = invoiceDao.getAllInvoicesByCustomerId(cvm.getCustomerId());
 
         List<Invoice> invoices = cvm.getInvoiceList();
-        invoices.forEach(in ->
+        invoices.stream().forEach(in ->
                 {
                     in.setCustomerId(cvm.getCustomerId());
 
@@ -291,7 +270,7 @@ public class ServiceLayer {
         List<Invoice> inList = invoiceDao.getAllInvoicesByCustomerId(customerId);
 
         if (inList != null) {
-            inList.forEach(in -> invoiceDao.deleteInvoice(in.getInvoiceId()));
+            inList.stream().forEach(in -> invoiceDao.deleteInvoice(in.getInvoiceId()));
         }
 
         customerDao.deleteCustomer(customerId);
@@ -349,7 +328,7 @@ public class ServiceLayer {
         if (invoiceItems == null || invoiceItems.isEmpty()) return null;
 
         List<InvoiceItemViewModel> iivmList = new ArrayList<>();
-        invoiceItems.forEach(invoiceItem -> iivmList.add(buildInvoiceItemViewModel(invoiceItem)));
+        invoiceItems.stream().forEach(invoiceItem -> iivmList.add(buildInvoiceItemViewModel(invoiceItem)));
 
         return iivmList;
     }

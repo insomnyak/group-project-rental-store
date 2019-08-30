@@ -1,11 +1,19 @@
 package com.company.rentalstorerestwebservicegroupproject.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 import java.util.Objects;
 
+@JsonIgnoreProperties(allowSetters = true, value = {"_orderDate", "_pickupDate", "_returnDate", })
 public class Invoice {
 
     @Digits(integer = 11, fraction = 0)
@@ -15,15 +23,27 @@ public class Invoice {
     @Digits(integer = 11, fraction = 0)
     private Integer customerId;
 
-    @NotNull(message = "Missing orderDate")
-    @PastOrPresent
     private LocalDate orderDate;
+    private LocalDate pickupDate;
+    private LocalDate returnDate;
+
+    @NotNull(message = "Missing orderDate")
+    @Pattern(regexp = "^[0-9]{4}[-](0[1-9]|1[0-2])[-](0[1-9]|[1-2][0-9]|3[0-1])$",
+            message = "Invalid pickup date."
+    )
+    private String _orderDate;
 
     @NotNull(message = "Missing pickup date")
-    private LocalDate pickupDate;
+    @Pattern(regexp = "^[0-9]{4}[-](0[1-9]|1[0-2])[-](0[1-9]|[1-2][0-9]|3[0-1])$",
+            message = "Invalid pickup date."
+    )
+    private String _pickupDate;
 
     @NotNull(message = "Missing return date")
-    private LocalDate returnDate;
+    @Pattern(regexp = "^[0-9]{4}[-](0[1-9]|1[0-2])[-](0[1-9]|[1-2][0-9]|3[0-1])$",
+            message = "Invalid pickup date."
+    )
+    private String _returnDate;
 
     @NotNull(message = "Missing late Fee")
     @Digits(integer = 8, fraction = 2)
@@ -75,6 +95,33 @@ public class Invoice {
 
     public void setLateFee(Double lateFee) {
         this.lateFee = lateFee;
+    }
+
+    public String get_orderDate() {
+        return _orderDate;
+    }
+
+    public void set_orderDate(String _orderDate) {
+        this.orderDate = LocalDate.parse(_orderDate);
+        this._orderDate = _orderDate;
+    }
+
+    public String get_pickupDate() {
+        return _pickupDate;
+    }
+
+    public void set_pickupDate(String _pickupDate) {
+        this.pickupDate = LocalDate.parse(_pickupDate);
+        this._pickupDate = _pickupDate;
+    }
+
+    public String get_returnDate() {
+        return _returnDate;
+    }
+
+    public void set_returnDate(String _returnDate) {
+        this.returnDate = LocalDate.parse(_returnDate);
+        this._returnDate = _returnDate;
     }
 
     @Override

@@ -45,6 +45,7 @@ public class CustomerViewModelController {
     public List<CustomerViewModel> getCustomerById(@PathVariable @Digits(integer = 11, fraction = 0) Integer id) {
         CustomerViewModel cvm = sl.findCustomerViewModel(id);
         List<CustomerViewModel> cvmList = new ArrayList<>();
+        if (cvm == null) return cvmList;
         cvmList.add(cvm);
         return cvmList;
     }
