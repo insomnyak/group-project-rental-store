@@ -99,14 +99,11 @@ public class ServiceLayer {
         Integer customerId = ivm.getCustomer().getCustomerId();
 
         //If I don't have a customerId
-        if (customerId==null){
-
+        if (customerId == null){
             customerDao.addCustomer(ivm.getCustomer());
-
         }
         else {
             //If I have a customerId but its not in the database
-
             Customer c = customerDao.getCustomer(ivm.getCustomer().getCustomerId());
             if (c == null)
                 customerDao.addCustomer(ivm.getCustomer());
@@ -122,11 +119,10 @@ public class ServiceLayer {
             ivm.setInvoiceId(invoice.getInvoiceId());
 
             Integer finalInvId = invoice.getInvoiceId();
-            ivm.getInvoiceItemList().stream().forEach(invoiceItemViewModel -> {
-                invoiceItemViewModel.setInvoiceId(finalInvId);
-                addInvoiceItemViewModel(invoiceItemViewModel);
+            ivm.getInvoiceItemList().forEach(iItemVM -> {
+                iItemVM.setInvoiceId(finalInvId);
+                iItemVM.setInvoiceItemId(addInvoiceItemViewModel(iItemVM).getInvoiceItemId());
             });
-
 
             return ivm;
     }
@@ -134,7 +130,7 @@ public class ServiceLayer {
     @Transactional
     public InvoiceViewModel findInvoiceViewModel(Integer ivmId) {
 
-        Invoice invoice=invoiceDao.getInvoice(ivmId);
+        Invoice invoice = invoiceDao.getInvoice(ivmId);
 
         return buildInvoiceViewModel(invoice) ;
     }
@@ -142,6 +138,7 @@ public class ServiceLayer {
     @Transactional
     public List<InvoiceViewModel> findInvoiceViewModelByCustomerId(Integer customerId) {
         List<Invoice> invoices = invoiceDao.getAllInvoicesByCustomerId(customerId);
+        if (invoices == null) return null;
         List<InvoiceViewModel> invoiceViewModels = new ArrayList<>();
         invoices.stream().forEach(invoice -> invoiceViewModels.add(buildInvoiceViewModel(invoice)));
         return invoiceViewModels;
@@ -177,10 +174,10 @@ public class ServiceLayer {
         // 1) delete Invoice Items where Invoice_Id = ivmId
         // 2) delete Invoice where invoice_id = ivmId
         //Remove the InvoiceItemViewModel
-        List<InvoiceItem> iivmList=invoiceItemDao.getInvoiceItemByInvoiceId(ivmId);
+        List<InvoiceItem> iivmList = invoiceItemDao.getInvoiceItemByInvoiceId(ivmId);
 
-        iivmList.stream()
-                .forEach(invoiceItemViewModel -> invoiceItemDao.deleteInvoiceItem(invoiceItemViewModel.getInvoiceItemId()));
+        iivmList.forEach(invoiceItemViewModel ->
+                invoiceItemDao.deleteInvoiceItem(invoiceItemViewModel.getInvoiceItemId()));
 
 
         //Remove the iivm
@@ -204,11 +201,9 @@ public class ServiceLayer {
 
         List<Invoice> invoices = cvm.getInvoiceList();
 
-        invoices.stream()
-                .forEach(in ->
-                {
+        invoices.forEach(in -> {
                     in.setCustomerId(cvm.getCustomerId());
-                    invoiceDao.addInvoice(in);
+                    in.setInvoiceId(invoiceDao.addInvoice(in).getInvoiceId());
                 });
 
         return cvm;
@@ -216,9 +211,8 @@ public class ServiceLayer {
 
     @Transactional
     public CustomerViewModel findCustomerViewModel(Integer cvmId) {
-
         Customer customer = customerDao.getCustomer(cvmId);
-
+        if (customer == null) return null;
         return buildCustomerViewModel(customer);
     }
 
@@ -270,21 +264,24 @@ public class ServiceLayer {
         List<Invoice> existingInvoices = invoiceDao.getAllInvoicesByCustomerId(cvm.getCustomerId());
 
         List<Invoice> invoices = cvm.getInvoiceList();
-        invoices.stream()
-                .forEach(in ->
+        invoices.forEach(in ->
                 {
                     in.setCustomerId(cvm.getCustomerId());
 
-                    in = invoiceDao.addInvoice(in);
-
-                    boolean exists = false;
-                    for (Invoice invoice : existingInvoices) {
-                        if (in.getInvoiceId() == invoice.getInvoiceId()) {
-                            exists = true;
+                    if (in.getInvoiceId() ==  null) {
+                        Invoice temp = invoiceDao.addInvoice(in);
+                        in.setInvoiceId(temp.getInvoiceId());
+                    } else {
+                        boolean exists = false;
+                        for (Invoice invoice : existingInvoices) {
+                            if (in.getInvoiceId() == invoice.getInvoiceId()) {
+                                exists = true;
+                            }
                         }
-                    }
-                    if (!exists) {
-                        invoiceDao.addInvoice(in);
+                        if (!exists) {
+                            Invoice temp = invoiceDao.addInvoice(in);
+                            in.setInvoiceId(temp.getInvoiceId());
+                        }
                     }
                 });
     }
@@ -293,8 +290,9 @@ public class ServiceLayer {
     public void deleteCustomerViewModel(Integer customerId) {
         List<Invoice> inList = invoiceDao.getAllInvoicesByCustomerId(customerId);
 
-        inList.stream()
-                .forEach(in -> invoiceDao.deleteInvoice(in.getInvoiceId()));
+        if (inList != null) {
+            inList.forEach(in -> invoiceDao.deleteInvoice(in.getInvoiceId()));
+        }
 
         customerDao.deleteCustomer(customerId);
     }
@@ -302,51 +300,57 @@ public class ServiceLayer {
     @Transactional
     public InvoiceItemViewModel addInvoiceItemViewModel(InvoiceItemViewModel iivm) {
 
-        Integer itemId=iivm.getItem().getItemId();
+        Integer itemId = iivm.getItem().getItemId();
 
-        //If I dont have an item
-        if(itemId==null){
-
-            itemDao.addItem(iivm.getItem());
+        //If I don't have an item
+        if (itemId == null) {
+            Item temp = itemDao.addItem(iivm.getItem());
+            iivm.getItem().setItemId(temp.getItemId());
         }
         else {
-
-            Item i=itemDao.getItem(iivm.getItem().getItemId());
-            if (i==null)
-                itemDao.addItem(iivm.getItem());
+            Item i = itemDao.getItem(itemId);
+            if (i == null) {
+                Item temp = itemDao.addItem(iivm.getItem());
+                iivm.getItem().setItemId(temp.getItemId());
+            }
         }
-            InvoiceItem ii=new InvoiceItem();
+            InvoiceItem ii = new InvoiceItem();
             ii.setInvoiceId(iivm.getInvoiceId());
             ii.setItemId(iivm.getItem().getItemId());
             ii.setQuantity(iivm.getQuantity());
             ii.setUnitRate(iivm.getUnitRate());
             ii.setDiscount(iivm.getDiscount());
-            ii=invoiceItemDao.addInvoiceItem(ii);
-            iivm.setInvoiceItemId(ii.getInvoiceItemId());
+
+            iivm.setInvoiceItemId(invoiceItemDao.addInvoiceItem(ii).getInvoiceItemId());
 
         return iivm;
     }
 
-    @Transactional
     public InvoiceItemViewModel findInvoiceItemViewModel(Integer iivmId) {
-
-        InvoiceItem ii=invoiceItemDao.getInvoiceItem(iivmId);
-
+        InvoiceItem ii = invoiceItemDao.getInvoiceItem(iivmId);
+        if (ii == null) return null;
         return buildInvoiceItemViewModel(ii);
     }
 
-    @Transactional
     public List<InvoiceItemViewModel> findAllInvoiceItemViewModels() {
+        List<InvoiceItem> iiList = invoiceItemDao.getAllInvoiceItems();
+        if (iiList == null || iiList.isEmpty()) return null;
 
-        List<InvoiceItem> iiList=invoiceItemDao.getAllInvoiceItems();
-
-        List<InvoiceItemViewModel> iivmList=new ArrayList<>();
-
-        for (InvoiceItem invoiceItem : iiList){
-
-            InvoiceItemViewModel iivm=buildInvoiceItemViewModel(invoiceItem);
+        List<InvoiceItemViewModel> iivmList = new ArrayList<>();
+        for (InvoiceItem invoiceItem : iiList) {
+            InvoiceItemViewModel iivm = buildInvoiceItemViewModel(invoiceItem);
             iivmList.add(iivm);
         }
+        return iivmList;
+    }
+
+    public List<InvoiceItemViewModel> findAllInvoiceItemViewModelByInvoiceId(Integer invoiceId) {
+        List<InvoiceItem> invoiceItems = invoiceItemDao.getInvoiceItemByInvoiceId(invoiceId);
+        if (invoiceItems == null || invoiceItems.isEmpty()) return null;
+
+        List<InvoiceItemViewModel> iivmList = new ArrayList<>();
+        invoiceItems.forEach(invoiceItem -> iivmList.add(buildInvoiceItemViewModel(invoiceItem)));
+
         return iivmList;
     }
 
@@ -357,11 +361,10 @@ public class ServiceLayer {
     }
 
     // Helper Methods
-    @Transactional
     private InvoiceViewModel buildInvoiceViewModel(Invoice invoice) {
 
         //make sure we have an invoice object; otherwise, return null...
-        if (invoice==null) return null;
+        if (invoice == null) return null;
 
         // Get the associated customer
         Customer customer = customerDao.getCustomer(invoice.getCustomerId());
@@ -388,7 +391,6 @@ public class ServiceLayer {
         return ivm;
     }
 
-    @Transactional
     private InvoiceItemViewModel buildInvoiceItemViewModel(InvoiceItem invoiceItem){
 
         if (invoiceItem==null) return null;

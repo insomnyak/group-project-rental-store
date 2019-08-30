@@ -79,18 +79,19 @@ public class InvoiceItem {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof InvoiceItem)) return false;
         InvoiceItem that = (InvoiceItem) o;
-        return invoiceItemId.equals(that.invoiceItemId) &&
-                invoiceId.equals(that.invoiceId) &&
-                itemId.equals(that.itemId) &&
-                quantity.equals(that.quantity) &&
-                unitRate.equals(that.unitRate) &&
-                discount.equals(that.discount);
+        return Objects.equals(getInvoiceItemId(), that.getInvoiceItemId()) &&
+                Objects.equals(getInvoiceId(), that.getInvoiceId()) &&
+                Objects.equals(getItemId(), that.getItemId()) &&
+                getQuantity().equals(that.getQuantity()) &&
+                getUnitRate().equals(that.getUnitRate()) &&
+                getDiscount().equals(that.getDiscount());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(invoiceItemId, invoiceId, itemId, quantity, unitRate, discount);
+        return Objects
+                .hash(getInvoiceItemId(), getInvoiceId(), getItemId(), getQuantity(), getUnitRate(), getDiscount());
     }
 }
