@@ -70,6 +70,17 @@ public class ServiceLayerTest {
         assertEquals(item1, item2);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void addItemWithId() {
+        Item item1 = new Item();
+        item1.setItemId(1);
+        item1.setName("xyx");
+        item1.setDescription("something");
+        item1.setDailyRate(new BigDecimal(23.45));
+
+        sl.addItem(item1);
+    }
+
     @Test
     public void findAllItem() {
         Item item1 = new Item();
