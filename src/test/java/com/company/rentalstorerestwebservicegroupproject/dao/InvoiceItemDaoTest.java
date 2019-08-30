@@ -36,16 +36,16 @@ public class InvoiceItemDaoTest {
     public void setUp() throws Exception {
         // Clean up the test db
         List<InvoiceItem> inList = invoiceItemDao.getAllInvoiceItems();
-        inList.stream().forEach(invoiceItem -> invoiceItemDao.deleteInvoiceItem(invoiceItem.getInvoiceItemId()));
+        inList.forEach(invoiceItem -> invoiceItemDao.deleteInvoiceItem(invoiceItem.getInvoiceItemId()));
 
         List<Invoice> iList = invoiceDao.getAllInvoices();
-        iList.stream().forEach(invoice -> invoiceDao.deleteInvoice(invoice.getInvoiceId()));
+        iList.forEach(invoice -> invoiceDao.deleteInvoice(invoice.getInvoiceId()));
 
         List<Customer> cList = customerDao.getAllCustomers();
-        cList.stream().forEach(customer -> customerDao.deleteCustomer(customer.getCustomerId()));
+        cList.forEach(customer -> customerDao.deleteCustomer(customer.getCustomerId()));
 
         List<Item> itList = itemDao.getAllItems();
-        itList.stream().forEach(item -> itemDao.deleteItem(item.getItem_id()));
+        itList.forEach(item -> itemDao.deleteItem(item.getItemId()));
     }
 
     @Test
@@ -68,15 +68,15 @@ public class InvoiceItemDaoTest {
         invoice = invoiceDao.addInvoice(invoice);
 
         Item item = new Item();
-        item.setItem_id(item.getItem_id());
+        item.setItemId(item.getItemId());
         item.setName("Apple");
         item.setDescription("Fruit");
-        item.setDaily_rate(BigDecimal.valueOf(2.99));
+        item.setDailyRate(BigDecimal.valueOf(2.99));
         item = itemDao.addItem(item);
 
         InvoiceItem invoiceitem = new InvoiceItem();
         invoiceitem.setInvoiceId(invoice.getInvoiceId());
-        invoiceitem.setItemId(item.getItem_id());
+        invoiceitem.setItemId(item.getItemId());
         invoiceitem.setQuantity(2);
         invoiceitem.setUnitRate(3.99);
         invoiceitem.setDiscount(2.99);
@@ -129,12 +129,12 @@ public class InvoiceItemDaoTest {
         Item item = new Item();
         item.setName("Apple");
         item.setDescription("Fruit");
-        item.setDaily_rate(BigDecimal.valueOf(2.99));
+        item.setDailyRate(BigDecimal.valueOf(2.99));
         item = itemDao.addItem(item);
 
         InvoiceItem invoiceitem = new InvoiceItem();
         invoiceitem.setInvoiceId(invoice.getInvoiceId());
-        invoiceitem.setItemId(item.getItem_id());
+        invoiceitem.setItemId(item.getItemId());
         invoiceitem.setQuantity(2);
         invoiceitem.setUnitRate(3.99);
         invoiceitem.setDiscount(2.99);
@@ -142,7 +142,7 @@ public class InvoiceItemDaoTest {
 
         invoiceitem = new InvoiceItem();
         invoiceitem.setInvoiceId(invoice.getInvoiceId());
-        invoiceitem.setItemId(item.getItem_id());
+        invoiceitem.setItemId(item.getItemId());
         invoiceitem.setQuantity(5);
         invoiceitem.setUnitRate(8.99);
         invoiceitem.setDiscount(5.99);
@@ -176,12 +176,12 @@ public class InvoiceItemDaoTest {
         Item item = new Item();
         item.setName("Apple");
         item.setDescription("Fruit");
-        item.setDaily_rate(BigDecimal.valueOf(2.99));
+        item.setDailyRate(BigDecimal.valueOf(2.99));
         item = itemDao.addItem(item);
 
         InvoiceItem invoiceitem = new InvoiceItem();
         invoiceitem.setInvoiceId(invoice.getInvoiceId());
-        invoiceitem.setItemId(item.getItem_id());
+        invoiceitem.setItemId(item.getItemId());
         invoiceitem.setQuantity(2);
         invoiceitem.setUnitRate(3.99);
         invoiceitem.setDiscount(2.99);
@@ -219,12 +219,12 @@ public class InvoiceItemDaoTest {
         Item item = new Item();
         item.setName("Apple");
         item.setDescription("Fruit");
-        item.setDaily_rate(BigDecimal.valueOf(2.99));
+        item.setDailyRate(BigDecimal.valueOf(2.99));
         item = itemDao.addItem(item);
 
         InvoiceItem invoiceitem = new InvoiceItem();
         invoiceitem.setInvoiceId(invoice.getInvoiceId());
-        invoiceitem.setItemId(item.getItem_id());
+        invoiceitem.setItemId(item.getItemId());
         invoiceitem.setQuantity(2);
         invoiceitem.setUnitRate(3.99);
         invoiceitem.setDiscount(2.99);
@@ -258,12 +258,12 @@ public class InvoiceItemDaoTest {
         Item item = new Item();
         item.setName("Apple");
         item.setDescription("Fruit");
-        item.setDaily_rate(BigDecimal.valueOf(2.99));
+        item.setDailyRate(BigDecimal.valueOf(2.99));
         item = itemDao.addItem(item);
 
         InvoiceItem invoiceitem = new InvoiceItem();
         invoiceitem.setInvoiceId(invoice.getInvoiceId());
-        invoiceitem.setItemId(item.getItem_id());
+        invoiceitem.setItemId(item.getItemId());
         invoiceitem.setQuantity(2);
         invoiceitem.setUnitRate(3.99);
         invoiceitem.setDiscount(2.99);

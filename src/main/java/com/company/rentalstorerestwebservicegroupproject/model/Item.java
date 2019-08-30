@@ -10,7 +10,7 @@ import java.util.Objects;
 public class Item {
 
     @Digits(integer = 11,fraction = 1)
-    private Integer item_id;
+    private Integer itemId;
 
     @NotNull(message = "Missing item name")
     @NotEmpty(message = "Missing item name")
@@ -21,14 +21,14 @@ public class Item {
     private String description;
 
     @Digits(integer = 8,fraction = 2)
-    private BigDecimal daily_rate;
+    private BigDecimal dailyRate;
 
-    public Integer getItem_id() {
-        return item_id;
+    public Integer getItemId() {
+        return itemId;
     }
 
-    public void setItem_id(Integer item_id) {
-        this.item_id = item_id;
+    public void setItemId(Integer itemId) {
+        this.itemId = itemId;
     }
 
     public String getName() {
@@ -47,12 +47,12 @@ public class Item {
         this.description = description;
     }
 
-    public BigDecimal getDaily_rate() {
-        return daily_rate;
+    public BigDecimal getDailyRate() {
+        return dailyRate;
     }
 
-    public void setDaily_rate(BigDecimal daily_rate) {
-        this.daily_rate = daily_rate;
+    public void setDailyRate(BigDecimal dailyRate) {
+        this.dailyRate = dailyRate;
     }
 
     @Override
@@ -60,14 +60,14 @@ public class Item {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Item item = (Item) o;
-        return item_id == item.item_id &&
+        return itemId == item.itemId &&
                 name.equals(item.name) &&
                 description.equals(item.description) &&
-                daily_rate.equals(item.daily_rate);
+                dailyRate.equals(item.dailyRate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(item_id, name, description, daily_rate);
+        return Objects.hash(itemId, name, description, dailyRate);
     }
 }

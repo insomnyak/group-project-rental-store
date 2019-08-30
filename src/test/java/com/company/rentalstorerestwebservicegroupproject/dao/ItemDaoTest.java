@@ -37,17 +37,16 @@ public class ItemDaoTest {
     public void setUp() throws Exception {
         // Clean up the test db
         List<InvoiceItem> inList = invoiceItemDao.getAllInvoiceItems();
-        inList.stream().forEach(invoiceItem -> invoiceItemDao.deleteInvoiceItem(invoiceItem.getInvoiceItemId()));
+        inList.forEach(invoiceItem -> invoiceItemDao.deleteInvoiceItem(invoiceItem.getInvoiceItemId()));
 
         List<Invoice> iList = invoiceDao.getAllInvoices();
-        iList.stream().forEach(invoice -> invoiceDao.deleteInvoice(invoice.getInvoiceId()));
+        iList.forEach(invoice -> invoiceDao.deleteInvoice(invoice.getInvoiceId()));
 
         List<Customer> cList = customerDao.getAllCustomers();
-        cList.stream().forEach(customer -> customerDao.deleteCustomer(customer.getCustomerId()));
+        cList.forEach(customer -> customerDao.deleteCustomer(customer.getCustomerId()));
 
         List<Item> itList = itemDao.getAllItems();
-        itList.stream().forEach(item -> itemDao.deleteItem(item.getItem_id()));
-
+        itList.forEach(item -> itemDao.deleteItem(item.getItemId()));
     }
     @Test
     public void addGetDeleteItem() {
@@ -55,18 +54,18 @@ public class ItemDaoTest {
         Item item = new Item();
         item.setName("chocolate");
         item.setDescription("delicious");
-        item.setDaily_rate(BigDecimal.valueOf(23.45));
+        item.setDailyRate(BigDecimal.valueOf(23.45));
 
 
         item = itemDao.addItem(item);
 
-        Item item1 = itemDao.getItem(item.getItem_id());
+        Item item1 = itemDao.getItem(item.getItemId());
 
         assertEquals(item1, item);
 
-        itemDao.deleteItem(item.getItem_id());
+        itemDao.deleteItem(item.getItemId());
 
-        item1 = itemDao.getItem(item.getItem_id());
+        item1 = itemDao.getItem(item.getItemId());
 
         assertNull(item1);
     }
@@ -78,16 +77,16 @@ public class ItemDaoTest {
         Item item = new Item();
         item.setName("chocolate");
         item.setDescription("delicious");
-        item.setDaily_rate(BigDecimal.valueOf(23.45));
+        item.setDailyRate(BigDecimal.valueOf(23.45));
         item = itemDao.addItem(item);
 
         item.setName("chips");
         item.setDescription("salty");
-        item.setDaily_rate(BigDecimal.valueOf(12.34));
+        item.setDailyRate(BigDecimal.valueOf(12.34));
 
         itemDao.updateItem(item);
 
-        Item item1 = itemDao.getItem(item.getItem_id());
+        Item item1 = itemDao.getItem(item.getItemId());
 
         assertEquals(item1, item);
     }
@@ -99,14 +98,14 @@ public class ItemDaoTest {
         Item item = new Item();
         item.setName("chocolate");
         item.setDescription("delicious");
-        item.setDaily_rate(BigDecimal.valueOf(23.45));
+        item.setDailyRate(BigDecimal.valueOf(23.45));
 
         item=itemDao.addItem(item);
 
         item = new Item();
         item.setName("chocolate");
         item.setDescription("delicious");
-        item.setDaily_rate(BigDecimal.valueOf(23.45));
+        item.setDailyRate(BigDecimal.valueOf(23.45));
 
         item = itemDao.addItem(item);
 

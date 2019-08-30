@@ -41,11 +41,11 @@ public class ItemDaoJdbcTemplateImpl implements ItemDao{
     @Transactional
     public Item addItem(Item item) {
 
-        jdbcTemplate.update(INSERT_ITEM_SQL, item.getName(), item.getDescription(), item.getDaily_rate());
+        jdbcTemplate.update(INSERT_ITEM_SQL, item.getName(), item.getDescription(), item.getDailyRate());
 
         int id = jdbcTemplate.queryForObject("select LAST_INSERT_ID()", Integer.class);
 
-        item.setItem_id(id);
+        item.setItemId(id);
         return item;
     }
 
@@ -68,7 +68,7 @@ public class ItemDaoJdbcTemplateImpl implements ItemDao{
     @Override
     public void updateItem(Item item) {
 
-        jdbcTemplate.update(UPDATE_ITEM_SQL, item.getName(), item.getDescription(), item.getDaily_rate(), item.getItem_id());
+        jdbcTemplate.update(UPDATE_ITEM_SQL, item.getName(), item.getDescription(), item.getDailyRate(), item.getItemId());
 
     }
 
@@ -80,10 +80,10 @@ public class ItemDaoJdbcTemplateImpl implements ItemDao{
 
     private Item mapRowToItem(ResultSet rs, int rowNum) throws SQLException {
         Item item = new Item();
-        item.setItem_id(rs.getInt("item_id"));
+        item.setItemId(rs.getInt("item_id"));
         item.setName(rs.getString("name"));
         item.setDescription(rs.getString("description"));
-        item.setDaily_rate(rs.getBigDecimal("daily_rate"));
+        item.setDailyRate(rs.getBigDecimal("daily_rate"));
 
         return item;
     }

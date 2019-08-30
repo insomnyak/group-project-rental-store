@@ -5,12 +5,15 @@ import com.company.rentalstorerestwebservicegroupproject.viewmodel.CustomerViewM
 import com.company.rentalstorerestwebservicegroupproject.viewmodel.InvoiceViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Digits;
 import java.util.List;
 
 @RestController
+@Validated
 public class InvoiceViewModelController {
 
     @Autowired
@@ -25,29 +28,32 @@ public class InvoiceViewModelController {
 
     @RequestMapping(value = "/invoice", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.OK)
-    public InvoiceViewModel addInvoicesVMs(@RequestBody @Valid InvoiceViewModel invoiceViewModel) {
+    public List<InvoiceViewModel> addInvoicesVMs(@RequestBody @Valid List<InvoiceViewModel> invoiceViewModels) {
 
-        return sl.addInvoiceViewModel(invoiceViewModel);
+        invoiceViewModels.forEach(invoiceViewModel -> sl.addInvoiceViewModel(invoiceViewModel));
+        return invoiceViewModels;
     };
 
     @RequestMapping(value = "/invoice/customer/{id}", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
-    public List<InvoiceViewModel> getAllInvoicesByCustomerVMs(@PathVariable Integer id ) {
+    public List<InvoiceViewModel> getAllInvoicesByCustomerVMs(@PathVariable @Digits(integer = 11, fraction = 0) Integer id ) {
 
         return sl.findInvoiceViewModelByCustomerId(id); //add the method
     };
 
     @RequestMapping(value = "/invoice/customer/{id}",method = RequestMethod.DELETE)
     @ResponseStatus(value = HttpStatus.OK)
-    public void deleteInvocesByCustom (@PathVariable Integer id){
+    public String deleteInvoicesByCustom (@PathVariable @Digits(integer = 11, fraction = 0) Integer id) {
 
-        sl.deleteInvoiceViewModelByCustomerId(id); // add method
+        sl.deleteInvoiceViewModelByCustomerId(id);
+        return String.format("Successfully deleted Invoices for customer id %s.", id);
     }
 
     @RequestMapping(value = "invoice/{id}",method = RequestMethod.DELETE)
     @ResponseStatus(value = HttpStatus.OK)
-    public void deleteInvoiceById(@PathVariable Integer id){
+    public String deleteInvoiceById(@PathVariable @Digits(integer = 11, fraction = 0) Integer id){
 
         sl.deleteInvoiceViewModel(id);
+        return String.format("Successfully deleted Invoice id %s.", id);
     }
 }
