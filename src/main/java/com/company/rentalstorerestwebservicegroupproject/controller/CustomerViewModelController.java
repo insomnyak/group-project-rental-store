@@ -37,7 +37,7 @@ public class CustomerViewModelController {
     }
 
     @RequestMapping(value = "/customer", method = RequestMethod.POST)
-    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseStatus(value = HttpStatus.CREATED)
     public List<CustomerViewModel> addCustomerList(@RequestBody @Valid List<CustomerViewModel> customerViewModels) {
         customerViewModels.stream().forEach(cvm -> sl.addCustomerViewModel(cvm));
         return customerViewModels;
