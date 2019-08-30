@@ -15,9 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.MissingRequiredPropertiesException;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Controller
 public class ServiceLayer {
@@ -40,6 +42,8 @@ public class ServiceLayer {
 
     @Transactional
     public Item addItem(Item item) {
+        if (item.getItemId() != null)
+            throw new IllegalArgumentException("Cannot add new Item with an itemId.");
         return itemDao.addItem(item);
     }
 
@@ -55,7 +59,10 @@ public class ServiceLayer {
 
     @Transactional
     public void updateItem(Item item) {
-        if (item.getItemId() == null) throw new IllegalArgumentException("No Item Id provided");
+        Integer itemId = item.getItemId();
+        if (itemId == null) throw new IllegalArgumentException("No Item Id provided");
+        Item item1 = itemDao.getItem(itemId);
+        if (item1 == null) throw new NoSuchElementException(String.format("Item #%s does not exist yet.", itemId));
         itemDao.updateItem(item);
     }
 
@@ -166,6 +173,10 @@ public class ServiceLayer {
 
     @Transactional
     public CustomerViewModel addCustomerViewModel(CustomerViewModel cvm) {
+
+        Integer customerId = cvm.getCustomerId();
+        if (customerId != null)
+            throw new IllegalArgumentException("You cannot add a new Customer with a customerId.");
 
         Customer c = new Customer();
         c.setFirstName(cvm.getFirstName());

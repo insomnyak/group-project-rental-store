@@ -331,7 +331,7 @@ components:
                   type: integer
                 _orderDate:
                   type: string
-                _pickUpDate:
+                _pickupDate:
                   type: string
                 _returnDate:
                   type: string
@@ -383,7 +383,7 @@ components:
                 type: string
           _orderDate:
             type: string
-          _pickUpDate:
+          _pickupDate:
             type: string
           _returnDate:
             type: string
@@ -420,7 +420,3 @@ components:
           - returnDate
           - lateFee
           - invoiceItems
-
-
-
-

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Digits;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @Validated
@@ -22,14 +23,15 @@ public class InvoiceViewModelController {
     @RequestMapping(value = "/invoice", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     public List<InvoiceViewModel> getAllInvoicesVMs() {
-
-        return sl.findAllInvoiceViewModels();
+        List<InvoiceViewModel> invoiceViewModels = sl.findAllInvoiceViewModels();
+        if (invoiceViewModels == null || invoiceViewModels.isEmpty())
+            throw new NoSuchElementException("No invoices were found :-(");
+        return invoiceViewModels;
     };
 
     @RequestMapping(value = "/invoice", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.OK)
     public List<InvoiceViewModel> addInvoicesVMs(@RequestBody @Valid List<InvoiceViewModel> invoiceViewModels) {
-
         invoiceViewModels.forEach(invoiceViewModel -> sl.addInvoiceViewModel(invoiceViewModel));
         return invoiceViewModels;
     };
@@ -37,22 +39,25 @@ public class InvoiceViewModelController {
     @RequestMapping(value = "/invoice/customer/{id}", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     public List<InvoiceViewModel> getAllInvoicesByCustomerVMs(@PathVariable @Digits(integer = 11, fraction = 0) Integer id ) {
-
-        return sl.findInvoiceViewModelByCustomerId(id); //add the method
+        List<InvoiceViewModel> invoiceViewModels = sl.findInvoiceViewModelByCustomerId(id);
+        if (invoiceViewModels == null || invoiceViewModels.isEmpty())
+            throw new NoSuchElementException(String.format("No invoices found for customer id #%s.", id));
+        return invoiceViewModels;
     };
 
     @RequestMapping(value = "/invoice/customer/{id}",method = RequestMethod.DELETE)
     @ResponseStatus(value = HttpStatus.OK)
     public String deleteInvoicesByCustom (@PathVariable @Digits(integer = 11, fraction = 0) Integer id) {
-
+        List<InvoiceViewModel> invoiceViewModels = sl.findInvoiceViewModelByCustomerId(id);
+        if (invoiceViewModels == null || invoiceViewModels.isEmpty())
+            throw new NoSuchElementException(String.format("No invoices found for customer id #%s.", id));
         sl.deleteInvoiceViewModelByCustomerId(id);
-        return String.format("Successfully deleted Invoices for customer id %s.", id);
+        return String.format("Successfully deleted %s invoices for customer id %s.", invoiceViewModels.size(), id);
     }
 
     @RequestMapping(value = "invoice/{id}",method = RequestMethod.DELETE)
     @ResponseStatus(value = HttpStatus.OK)
     public String deleteInvoiceById(@PathVariable @Digits(integer = 11, fraction = 0) Integer id){
-
         sl.deleteInvoiceViewModel(id);
         return String.format("Successfully deleted Invoice id %s.", id);
     }
