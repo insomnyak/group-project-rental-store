@@ -38,20 +38,22 @@ public class ServiceLayerTest {
     private InvoiceItem invoiceItem2C = new InvoiceItem();
     private Invoice invoice1a =new Invoice();
     private Invoice invoice1b = new Invoice();
-    Customer customer = new Customer();
-    Customer customer2 = new Customer();
-    Customer customer3 = new Customer();
+    private Invoice invoice2a =new Invoice();
+    private Invoice invoice2b = new Invoice();
+    private Customer customer = new Customer();
+    private Customer customer2 = new Customer();
+    private Customer customer3 = new Customer();
 
     @Before
     public void setUp() throws Exception {
+        constructSampleData();
+
         setUpCustomerDaoMock();
         setUpInvoiceDaoMock();
         setUpInvoiceItemDaoMock();
         setUpItemDaoMock();
 
         sl = new ServiceLayer(customerDao, invoiceDao, invoiceItemDao, itemDao);
-
-        constructSampleData();
     }
 
 
@@ -106,7 +108,7 @@ public class ServiceLayerTest {
     }
 
     @Test
-    public void addFindDeleteInvoiceViewModel() {
+    public void addFindInvoiceViewModel() {
         InvoiceViewModel ivm = new InvoiceViewModel();
 
         Customer customer = new Customer();
@@ -126,7 +128,6 @@ public class ServiceLayerTest {
 
         InvoiceItemViewModel iivm = new InvoiceItemViewModel();
         InvoiceItem invoiceItem1 = new InvoiceItem();
-        iivm.setInvoiceId(1);
         iivm.setQuantity(45);
         iivm.setUnitRate(234.23);
         iivm.setDiscount(23.33);
@@ -141,13 +142,25 @@ public class ServiceLayerTest {
         List<InvoiceItemViewModel> iivms = new ArrayList<>();
         iivms.add(iivm);
 
+        ivm.setInvoiceItemList(iivms);
+
         sl.addInvoiceViewModel(ivm);
         InvoiceViewModel ivm2 = sl.findInvoiceViewModel(ivm.getInvoiceId());
         assertEquals(ivm, ivm2);
+    }
 
-        sl.deleteInvoiceViewModel(ivm.getInvoiceId());
-        ivm2 = sl.findInvoiceViewModel(ivm.getInvoiceId());
-        assertNull(ivm2);
+    @Test
+    public void deleteInvoiceViewModel() {
+        sl.deleteInvoiceViewModel(2);
+        InvoiceViewModel ivm = sl.findInvoiceViewModel(2);
+        assertNull(ivm);
+
+        sl.deleteInvoiceItemViewModel(15);
+        InvoiceItemViewModel iivm = sl.findInvoiceItemViewModel(15);
+        assertNull(iivm);
+
+        List<InvoiceItemViewModel> iivmList = sl.findAllInvoiceItemViewModelByInvoiceId(15);
+        assertNull(iivmList);
     }
 
     @Test
@@ -185,13 +198,15 @@ public class ServiceLayerTest {
         List<InvoiceItemViewModel> iivms = new ArrayList<>();
         iivms.add(iivm);
 
+        ivm.setInvoiceItemList(iivms);
+
         sl.addInvoiceViewModel(ivm);
         List<InvoiceViewModel> invoiceViewModels = sl.findAllInvoiceViewModels();
         assertEquals(1, invoiceViewModels.size());
     }
 
     @Test
-    public void addFindDeleteCustomerViewModel() {
+    public void addFindCustomerViewModel() {
         CustomerViewModel customerVM = new CustomerViewModel();
 
         customerVM.setFirstName("Elinisa");
@@ -208,10 +223,16 @@ public class ServiceLayerTest {
         sl.addCustomerViewModel(customerVM);
         CustomerViewModel customerVM2 = sl.findCustomerViewModel(customerVM.getCustomerId());
         assertEquals(customerVM, customerVM2);
+    }
 
+    @Test
+    public void deleteCustomerViewModel() {
         sl.deleteCustomerViewModel(5);
-        customerVM2 = sl.findCustomerViewModel(5);
-        assertNull(customerVM2);
+        CustomerViewModel cvm = sl.findCustomerViewModel(5);
+        assertNull(cvm);
+
+        List<InvoiceViewModel> ivm = sl.findInvoiceViewModelByCustomerId(5);
+        assertNull(ivm);
     }
 
     @Test
@@ -246,7 +267,7 @@ public class ServiceLayerTest {
         customerVM.setPhone("7186693543");
 
         List<Invoice> invoices = new ArrayList<>();
-        invoices.add(invoice1a);
+        invoices.add(invoice2a);
 
         customerVM.setInvoiceList(invoices);
 
@@ -278,6 +299,7 @@ public class ServiceLayerTest {
         item2c.setItemId(100);
         item2c.setName("something else");
         item2c.setDescription("something");
+        item2c.setDailyRate(new BigDecimal(23.45));
 
         invoiceItem1A.setInvoiceId(1);
         invoiceItem1A.setItemId(99);
@@ -294,14 +316,14 @@ public class ServiceLayerTest {
 
         invoiceItem2A.setInvoiceId(1);
         invoiceItem2A.setItemId(99);
-        invoiceItem2A.setQuantity(45);
+        invoiceItem2A.setQuantity(46);
         invoiceItem2A.setUnitRate(234.23);
         invoiceItem2A.setDiscount(23.33);
 
         invoiceItem2B.setInvoiceItemId(2);
         invoiceItem2B.setInvoiceId(1);
         invoiceItem2B.setItemId(99);
-        invoiceItem2B.setQuantity(45);
+        invoiceItem2B.setQuantity(46);
         invoiceItem2B.setUnitRate(234.23);
         invoiceItem2B.setDiscount(23.33);
 
@@ -312,6 +334,12 @@ public class ServiceLayerTest {
         invoiceItem2C.setUnitRate(234.23);
         invoiceItem2C.setDiscount(23.33);
 
+        invoice1a.setCustomerId(1);
+        invoice1a.setOrderDate(LocalDate.of(2019,5,6));
+        invoice1a.setPickupDate(LocalDate.of(2020,7,8));
+        invoice1a.setReturnDate(LocalDate.of(2018,4,5));
+        invoice1a.setLateFee(34.65);
+
         invoice1b.setInvoiceId(1);
         invoice1b.setCustomerId(1);
         invoice1b.setOrderDate(LocalDate.of(2019,5,6));
@@ -319,11 +347,18 @@ public class ServiceLayerTest {
         invoice1b.setReturnDate(LocalDate.of(2018,4,5));
         invoice1b.setLateFee(34.65);
 
-        invoice1a.setCustomerId(1);
-        invoice1a.setOrderDate(LocalDate.of(2019,5,6));
-        invoice1a.setPickupDate(LocalDate.of(2020,7,8));
-        invoice1a.setReturnDate(LocalDate.of(2018,4,5));
-        invoice1a.setLateFee(34.65);
+        invoice2a.setCustomerId(3);
+        invoice2a.setOrderDate(LocalDate.of(2019,5,6));
+        invoice2a.setPickupDate(LocalDate.of(2020,7,8));
+        invoice2a.setReturnDate(LocalDate.of(2018,4,5));
+        invoice2a.setLateFee(34.65);
+
+        invoice2b.setInvoiceId(3);
+        invoice2b.setCustomerId(3);
+        invoice2b.setOrderDate(LocalDate.of(2019,5,6));
+        invoice2b.setPickupDate(LocalDate.of(2020,7,8));
+        invoice2b.setReturnDate(LocalDate.of(2018,4,5));
+        invoice2b.setLateFee(34.65);
 
         customer.setCustomerId(1);
         customer.setFirstName("Elinisa");
@@ -382,19 +417,29 @@ public class ServiceLayerTest {
 
         doNothing().when(invoiceItemDao).deleteInvoiceItem(15);
         doReturn(null).when(invoiceItemDao).getInvoiceItem(15);
+
+        doReturn(invoiceItems).when(invoiceItemDao).getInvoiceItemByInvoiceId(1);
     }
 
     private void setUpInvoiceDaoMock() {
         invoiceDao = mock(InvoiceDaoJdbcTemplateImpl.class);
 
-        List<Invoice> ivList = new ArrayList<>();
-        ivList.add(invoice1b);
+        List<Invoice> list1 = new ArrayList<>();
+        list1.add(invoice1b);
+
+        List<Invoice> list2 = new ArrayList<>();
+        list2.add(invoice2b);
 
         doReturn(invoice1b).when(invoiceDao).addInvoice(invoice1a);
         doReturn(invoice1b).when(invoiceDao).getInvoice(1);
-        doReturn(ivList).when(invoiceDao).getAllInvoices();
+        doReturn(invoice2b).when(invoiceDao).addInvoice(invoice2a);
+        doReturn(invoice2b).when(invoiceDao).getInvoice(3);
+        doReturn(list1).when(invoiceDao).getAllInvoices();
         doNothing().when(invoiceDao).deleteInvoice(2);
         doReturn(null).when(invoiceDao).getInvoice(2);
+        doReturn(list2).when(invoiceDao).getAllInvoicesByCustomerId(3);
+        doReturn(null).when(invoiceDao).getAllInvoicesByCustomerId(5);
+        doReturn(list1).when(invoiceDao).getAllInvoicesByCustomerId(1);
 
     }
 

@@ -82,8 +82,8 @@ public class Invoice {
         if (this == o) return true;
         if (!(o instanceof Invoice)) return false;
         Invoice invoice = (Invoice) o;
-        return getInvoiceId().equals(invoice.getInvoiceId()) &&
-                getCustomerId().equals(invoice.getCustomerId()) &&
+        return Objects.equals(getInvoiceId(), invoice.getInvoiceId()) &&
+                Objects.equals(getCustomerId(), invoice.getCustomerId()) &&
                 getOrderDate().equals(invoice.getOrderDate()) &&
                 getPickupDate().equals(invoice.getPickupDate()) &&
                 getReturnDate().equals(invoice.getReturnDate()) &&

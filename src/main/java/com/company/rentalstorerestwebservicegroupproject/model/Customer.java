@@ -91,18 +91,18 @@ public class Customer {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Customer)) return false;
         Customer customer = (Customer) o;
-        return getCustomerId() == customer.getCustomerId() &&
-                Objects.equals(getFirstName(), customer.getFirstName()) &&
-                Objects.equals(getLastName(), customer.getLastName()) &&
-                Objects.equals(getEmail(), customer.getEmail()) &&
-                Objects.equals(getCompany(), customer.getCompany()) &&
-                Objects.equals(getPhone(), customer.getPhone());
+        return Objects.equals(getCustomerId(), customer.getCustomerId()) &&
+                getFirstName().equals(customer.getFirstName()) &&
+                getLastName().equals(customer.getLastName()) &&
+                getEmail().equals(customer.getEmail()) &&
+                getCompany().equals(customer.getCompany()) &&
+                getPhone().equals(customer.getPhone());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getCustomerId(), getFirstName(), getLastName(), getEmail(),getCompany(),getPhone());
+        return Objects.hash(getCustomerId(), getFirstName(), getLastName(), getEmail(), getCompany(), getPhone());
     }
 }

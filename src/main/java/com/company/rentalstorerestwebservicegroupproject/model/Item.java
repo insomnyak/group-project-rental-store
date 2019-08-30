@@ -58,16 +58,16 @@ public class Item {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Item)) return false;
         Item item = (Item) o;
-        return itemId == item.itemId &&
-                name.equals(item.name) &&
-                description.equals(item.description) &&
-                dailyRate.equals(item.dailyRate);
+        return Objects.equals(getItemId(), item.getItemId()) &&
+                getName().equals(item.getName()) &&
+                Objects.equals(getDescription(), item.getDescription()) &&
+                getDailyRate().equals(item.getDailyRate());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(itemId, name, description, dailyRate);
+        return Objects.hash(getItemId(), getName(), getDescription(), getDailyRate());
     }
 }
