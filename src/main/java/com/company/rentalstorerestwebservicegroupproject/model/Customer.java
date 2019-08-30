@@ -21,7 +21,7 @@ public class Customer {
     @NotNull(message = "Please enter an email")
     @NotEmpty(message = "Please enter an email")
     @Size(max=75, message = "Your email is too long")
-    @Pattern(regexp = "^[a-z0-9]+([._][a-z0-9]+)*[@][a-z0-9]+([.][a-z0-9]+)*$",
+    @Pattern(regexp = "^[a-z0-9]+([-._][a-z0-9]+)*[@][a-z0-9]+([-._][a-z0-9]+)+$",
         flags = {Pattern.Flag.CASE_INSENSITIVE},
         message = "Invalid email address provided"
     )
