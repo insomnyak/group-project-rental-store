@@ -47,8 +47,8 @@ paths:
             schema:
               $ref: '#/components/schemas/Customers'
       responses:
-        '200':
-          description: list of all the customers
+        '201':
+          description: created the list of all the customers
           content:
             application/json:
               schema:
@@ -144,8 +144,8 @@ paths:
             schema:
               $ref: '#/components/schemas/Items'
       responses:
-        '200':
-          description: list of all the items
+        '201':
+          description: created the list of items
           content:
             application/json:
               schema:
@@ -220,8 +220,8 @@ paths:
             schema:
               $ref: '#/components/schemas/Invoices'
       responses:
-        '200':
-          description: list of all the invoices
+        '201':
+          description: created the list of invoices
           content:
             application/json:
               schema:

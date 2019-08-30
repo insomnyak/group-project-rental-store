@@ -30,7 +30,7 @@ public class InvoiceViewModelController {
     };
 
     @RequestMapping(value = "/invoice", method = RequestMethod.POST)
-    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseStatus(value = HttpStatus.CREATED)
     public List<InvoiceViewModel> addInvoicesVMs(@RequestBody @Valid List<InvoiceViewModel> invoiceViewModels) {
         invoiceViewModels.forEach(invoiceViewModel -> sl.addInvoiceViewModel(invoiceViewModel));
         return invoiceViewModels;

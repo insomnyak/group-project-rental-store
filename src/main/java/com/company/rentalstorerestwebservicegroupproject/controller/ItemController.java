@@ -36,7 +36,7 @@ public class ItemController {
     };
 
     @RequestMapping(value = "/item", method = RequestMethod.POST)
-    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseStatus(value = HttpStatus.CREATED)
     public List<Item> addItems(@RequestBody @Valid List<Item> items) {
         items.forEach(item -> sl.addItem(item));
         return items;
