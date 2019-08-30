@@ -50,16 +50,16 @@ public class InvoiceDaoTest {
     public void setUp() throws Exception {
         // Clean up the test db
         List<InvoiceItem> inList = invoiceItemDao.getAllInvoiceItems();
-        inList.stream().forEach(invoiceItem -> invoiceItemDao.deleteInvoiceItem(invoiceItem.getInvoiceItemId()));
+        inList.forEach(invoiceItem -> invoiceItemDao.deleteInvoiceItem(invoiceItem.getInvoiceItemId()));
 
         List<Invoice> iList = invoiceDao.getAllInvoices();
-        iList.stream().forEach(invoice -> invoiceDao.deleteInvoice(invoice.getInvoiceId()));
+        iList.forEach(invoice -> invoiceDao.deleteInvoice(invoice.getInvoiceId()));
 
         List<Customer> cList = customerDao.getAllCustomers();
-        cList.stream().forEach(customer -> customerDao.deleteCustomer(customer.getCustomerId()));
+        cList.forEach(customer -> customerDao.deleteCustomer(customer.getCustomerId()));
 
         List<Item> itList = itemDao.getAllItems();
-        itList.stream().forEach(item -> itemDao.deleteItem(item.getItem_id()));
+        itList.forEach(item -> itemDao.deleteItem(item.getItemId()));
     }
 
     @Test

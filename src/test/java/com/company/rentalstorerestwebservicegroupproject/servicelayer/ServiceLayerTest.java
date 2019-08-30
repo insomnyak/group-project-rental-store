@@ -60,11 +60,11 @@ public class ServiceLayerTest {
         Item item1 = new Item();
         item1.setName("xyx");
         item1.setDescription("something");
-        item1.setDaily_rate(new BigDecimal(23.45));
+        item1.setDailyRate(new BigDecimal(23.45));
 
         item1 = sl.addItem(item1);
 
-        Item item2 = sl.findItem(item1.getItem_id());
+        Item item2 = sl.findItem(item1.getItemId());
         assertEquals(item1, item2);
     }
 
@@ -73,7 +73,7 @@ public class ServiceLayerTest {
         Item item1 = new Item();
         item1.setName("xyx");
         item1.setDescription("something");
-        item1.setDaily_rate(new BigDecimal(23.45));
+        item1.setDailyRate(new BigDecimal(23.45));
         item1 = sl.addItem(item1);
 
         List<Item> items = sl.findAllItem();
@@ -85,7 +85,7 @@ public class ServiceLayerTest {
         Item item1 = new Item();
         item1.setName("xyxx");
         item1.setDescription("somethingx");
-        item1.setDaily_rate(new BigDecimal(23.45));
+        item1.setDailyRate(new BigDecimal(23.45));
 
         item1 = sl.addItem(item1);
 
@@ -94,7 +94,7 @@ public class ServiceLayerTest {
 
         sl.updateItem(item1);
 
-        Item item2 = sl.findItem(item1.getItem_id());
+        Item item2 = sl.findItem(item1.getItemId());
         assertEquals(item1, item2);
     }
 
@@ -134,7 +134,7 @@ public class ServiceLayerTest {
         Item item = new Item();
         item.setName("xyx");
         item.setDescription("something");
-        item.setDaily_rate(new BigDecimal(23.45));
+        item.setDailyRate(new BigDecimal(23.45));
 
         iivm.setItem(item);
 
@@ -178,7 +178,7 @@ public class ServiceLayerTest {
         Item item = new Item();
         item.setName("xyx");
         item.setDescription("something");
-        item.setDaily_rate(new BigDecimal(23.45));
+        item.setDailyRate(new BigDecimal(23.45));
 
         iivm.setItem(item);
 
@@ -259,23 +259,23 @@ public class ServiceLayerTest {
 
         item1a.setName("xyx");
         item1a.setDescription("something");
-        item1a.setDaily_rate(new BigDecimal(23.45));
+        item1a.setDailyRate(new BigDecimal(23.45));
 
-        item1b.setItem_id(99);
+        item1b.setItemId(99);
         item1b.setName("xyx");
         item1b.setDescription("something");
-        item1b.setDaily_rate(new BigDecimal(23.45));
+        item1b.setDailyRate(new BigDecimal(23.45));
 
         item2a.setName("xyxx");
         item2a.setDescription("somethingx");
-        item2a.setDaily_rate(new BigDecimal(23.45));
+        item2a.setDailyRate(new BigDecimal(23.45));
 
-        item2b.setItem_id(100);
+        item2b.setItemId(100);
         item2b.setName("xyxx");
         item2b.setDescription("somethingx");
-        item2b.setDaily_rate(new BigDecimal(23.45));
+        item2b.setDailyRate(new BigDecimal(23.45));
 
-        item2c.setItem_id(100);
+        item2c.setItemId(100);
         item2c.setName("something else");
         item2c.setDescription("something");
 
